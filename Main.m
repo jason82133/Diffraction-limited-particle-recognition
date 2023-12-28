@@ -12,9 +12,6 @@ path = 'G:\Arabidopsis\20231221_Simpull_Syn\Syn1-MJFR-1';
 %% Execution
 clearvars -except Save_path 
 
-% Prompt the user to select the folder containing TIFF images
-%path = uigetdir('Select the folder containing TIFF images');
-
 Save_path = path;
 
 tic
