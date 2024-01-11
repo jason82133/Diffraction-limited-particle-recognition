@@ -1,4 +1,4 @@
-function [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath)
+function [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame)
 
     % Get a list of all TIFF files in the folder
     tifFiles = dir(fullfile(folderPath, '*.tif'));
@@ -12,12 +12,12 @@ function [averagedStacksList, averagedFileNamesList, folderName, imageName, well
 
     % Get the image name
     % Use the pattern to get the well number part
-    for i = 1:numel(tifFiles)
-        parts = strsplit(tifFiles(i).name, '_');
-        imageName{i} = parts{1};
+    for k = 1:numel(tifFiles)
+        parts = strsplit(tifFiles(k).name, '_');
+        imageName{k} = parts{1};
 
-        matchedWell = regexp(tifFiles(i).name, pattern, 'tokens', 'once');
-        wellName{i} = ['X' matchedWell{1} 'Y' matchedWell{2}];
+        matchedWell = regexp(tifFiles(k).name, pattern, 'tokens', 'once');
+        wellName{k} = ['X' matchedWell{1} 'Y' matchedWell{2}];
     end
     
     % Initialize a cell array to store the image stack and corresponding file names
@@ -33,9 +33,16 @@ function [averagedStacksList, averagedFileNamesList, folderName, imageName, well
         
         % Read only the header of the example file to get information
         info = imfinfo(filePath);
-      
+        
+        % Remove frames after the specified number
+        if isempty(truncatedFrame) == 1
+            frameLoaded = numel(info);
+        else
+            frameLoaded = truncatedFrame;
+        end
+
         % Read the TIFF image
-        for j = 1:numel(info)
+        for j = 1:frameLoaded
             currentImage(:,:,j) = imread(filePath, j);
         end
         

@@ -66,9 +66,11 @@ function [objectList, posList] = organizeObjectData(objects)
        objectList(num).BackgroundStd = tempList(num,8);
        objectList(num).imageNum = tempList(num,9);
     end
-    [objectList.folderName] = folderList{:};
-    [objectList.imageName] = imageList{:};
-    [objectList.wellName] = wellList{:};
+    if ~isempty(objectList) == 1
+        [objectList.folderName] = folderList{:};
+        [objectList.imageName] = imageList{:};
+        [objectList.wellName] = wellList{:};
+    end
     
     posList = struct('objectIndex', {}, 'PixelPosX', {}, 'PixelPosY', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
     posList = repmat(posList, length(tempPosList), 1);
@@ -80,5 +82,8 @@ function [objectList, posList] = organizeObjectData(objects)
         posList(numPos).CentroidPosY = tempPosList(numPos,5);
         posList(numPos).imageNum = tempPosList(numPos,6);
     end
-    [posList.imageName] = imagePosList{:};
+    
+    if ~isempty(objectList) == 1
+        [posList.imageName] = imagePosList{:};
+    end
 end

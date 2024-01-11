@@ -31,16 +31,19 @@ function objects = identifyObjects(outputImageList, folderName, imageName, wellN
             % Calculate sum intensity
             sumIntensity = sum(currentImage(stats(j).PixelIdxList));
             
+            % Calculate number of pixels of an object
+            NumPixels = numel(row);
+            
             % Store object data
             objectData{j}.folderName = folderName;
             objectData{j}.imageName = imageName{i};
             objectData{j}.wellName = wellName{i};
             objectData{j}.PixelPositions = [row, col];
             objectData{j}.CentroidPositions = stats(j).Centroid;
-            objectData{j}.NumPixels = numel(row);
+            objectData{j}.NumPixels = NumPixels;
             objectData{j}.SumIntensity = sumIntensity;
-            objectData{j}.avgPixelIntensity = sumIntensity/(numel(row));
-            objectData{j}.SBdiff = SumIntensity - NumPixels*MeanOfBackground;
+            objectData{j}.avgPixelIntensity = sumIntensity/NumPixels;
+            objectData{j}.SBdiff = sumIntensity - NumPixels*mu(i);
             objectData{j}.Eccentricity = stats(j).Eccentricity;
             objectData{j}.MeanOfBackground = mu(i);
             objectData{j}.StDOfBackground = sigma(i);

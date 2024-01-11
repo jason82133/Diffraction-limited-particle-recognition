@@ -3,14 +3,13 @@
 
 %% Setting
 
-% Direct to the folder to be analysed
-path = 'G:\Arabidopsis\20231221_Simpull_Syn\Syn1-MJFR-1';
+path = 'G:\Arabidopsis\20240110_Simpull_Syn_Serum dilution\240104-Q_X1-3_2024-01-10_18-58-11'; % Direct to the main folder to be analysed
 
-
+truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
 
 %% Execution
-clearvars -except Save_path 
+clearvars -except path truncatedFrame
 
 Save_path = path;
 
@@ -30,7 +29,7 @@ if ~isempty(subfolderNames)
         folderPath = [path '\' subfolderNames{i}];
 
         disp(['Loading images from ' num2str(subfolderNames{i}) '..'])
-        [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath);
+        [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
 
         disp('Subtracting background..')
         [outputImageList, mu, sigma] = backgroundSubtraction(averagedStacksList);
@@ -42,13 +41,13 @@ if ~isempty(subfolderNames)
 
         disp('Saving data..')
         dataPath = export(filteredList, Save_path, folderName);
-        drawFigure(averagedStacksList, posList, dataPath);
+        drawFigure(averagedStacksList, posList, dataPath, imageName);
     end
 else
     folderPath = path;
 
     disp('Loading images from the current folder..')
-    [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath);
+    [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
     
     disp('Subtracting background..')
     [outputImageList, mu, sigma] = backgroundSubtraction(averagedStacksList);
@@ -60,7 +59,7 @@ else
     
     disp('Saving data..')
     dataPath = export(filteredList, Save_path, folderName);
-    drawFigure(averagedStacksList, posList, dataPath);
+    drawFigure(averagedStacksList, posList, dataPath, imageName);
 end
 
 disp('Completed!')

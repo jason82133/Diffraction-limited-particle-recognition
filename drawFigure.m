@@ -1,4 +1,4 @@
-function drawFigure(averagedStacksList, posList, dataPath)
+function drawFigure(averagedStacksList, posList, dataPath, imageName)
     
     warning('off','MATLAB:MKDIR:DirectoryExists')
     figPath = [dataPath '\Figures'];
@@ -27,6 +27,12 @@ function drawFigure(averagedStacksList, posList, dataPath)
             aggregateImage(y, x) = 1;  % Note the reversal of x and y here
         end
         
+        if isempty(aggregateListOftheImage) == 1
+            disp(imageName{imageNum})
+            aggregateListOftheImage(1).imageName = imageName{imageNum};
+        end
+
+
         f = figure('Name',num2str(aggregateListOftheImage(1).imageName), 'visible', 'off');
         f.Position(3:4) = [1300 500];
         

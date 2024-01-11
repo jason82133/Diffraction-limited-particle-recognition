@@ -17,5 +17,14 @@ function filteredList = filterData(originalStruct)
             filteredList(end + 1) = originalStruct(i);
         end
     end
+    
+    if ~isempty(filteredList) == 1
+        temp = flaggingMech(filteredList);
+    end
+
+    % Add a new field 'Flags' and flag the filtered elements
+    for rowFilteredList = 1:numel(filteredList)
+        filteredList(rowFilteredList).Flags = temp{rowFilteredList};  % Label filtered elements
+    end
 
 end
