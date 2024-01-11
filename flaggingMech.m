@@ -19,12 +19,12 @@ function temp = flaggingMech(filteredList)
         mean_b = mean(data_BackgroundMean);
         std_b = std(data_BackgroundMean);
         
-        % Define the significance level of sigma for flagging unusual elements in a well
-        significanceLevel = 2;
+        % Define the range for threshold is +-10% of the mean
+        level = 0.1;
         
         % Calculate the threshold for filtering
-        highThreshold = mean_b + significanceLevel * std_b;
-        lowThreshold = mean_b - significanceLevel * std_b;
+        highThreshold = mean_b*(1 + level);
+        lowThreshold = mean_b*(1 - level);
         
         % Identify elements with p-value > 2 sigma
         filteredIndices_BackgroundMean = find(data_BackgroundMean > highThreshold | data_BackgroundMean < lowThreshold);

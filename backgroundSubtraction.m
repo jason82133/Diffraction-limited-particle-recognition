@@ -7,10 +7,30 @@ function [outputImageList, mu, sigma] = backgroundSubtraction(averagedStacksList
         % Get the current z-averaged image
         currentImage = averagedStacksList{i};
 
-        % Flatten the image into a column vector
-        intensities = currentImage(:);
 
-        % Fit a normal distribution to the pixel intensities
+
+        % First itinerary of fitting a normal distribution to the pixel intensities in order to remove extreme values
+        % Flatten the image into a column vector
+        tempintensities = currentImage(:);
+        
+        temppd = fitdist(tempintensities, 'Normal');
+        
+        templowerThreshold = temppd.icdf(0.25);
+        tempupperThreshold = temppd.icdf(0.75);
+        tempIQR = tempupperThreshold - templowerThreshold;
+        tempMu = (tempupperThreshold + templowerThreshold) / 2;
+        tempSigma = tempIQR / 1.349;
+
+        temppValues = 1 - cdf(temppd, tempintensities);
+        outlierPixels = currentImage(temppValues >= 0.00000001);
+        tempImage = zeros(size(currentImage));
+        tempImage(temppValues >= 0.00000001) = outlierPixels;
+        
+        intensities = tempImage(:); % new intensity distribution without extreme values; to be fitted
+
+
+        
+        % Second itinerary of fitting a normal distribution to the pixel intensities
         pd = fitdist(intensities, 'Normal');
 
         % Estimate mean and variance using percentiles
@@ -28,8 +48,8 @@ function [outputImageList, mu, sigma] = backgroundSubtraction(averagedStacksList
         % Calculate mean using the median (assuming symmetry in a normal distribution)
         mu(i) = (upperThreshold + lowerThreshold) / 2;
 
-        % Filter out pixels with right-sided p-value below 2.5 sigma
-        pThreshold = 0.006;
+        % Filter out pixels with right-sided p-value below 2.5 sigma 0.006%
+        pThreshold = 0.05;
         pValues = 1 - cdf(pd, intensities);
         filteredPixels = currentImage(pValues < pThreshold);
 

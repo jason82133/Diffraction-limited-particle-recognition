@@ -3,7 +3,7 @@
 
 %% Setting
 
-path = 'G:\Arabidopsis\20240110_Simpull_Syn_Serum dilution\240104-Q_X1-3_2024-01-10_18-58-11'; % Direct to the main folder to be analysed
+path = 'G:\Arabidopsis\20240110_Simpull_Syn_Serum dilution'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
