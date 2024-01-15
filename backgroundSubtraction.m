@@ -22,40 +22,76 @@ function [outputImageList, mu, sigma] = backgroundSubtraction(averagedStacksList
         tempSigma = tempIQR / 1.349;
 
         temppValues = 1 - cdf(temppd, tempintensities);
-        outlierPixels = currentImage(temppValues >= 0.00000001);
+
+        level = 0.333; % A course filter with right-sided p-value of 1 sigma that removes most of bright signal pixels in order to approximate normal distribution of the noises
+        outlierPixels = currentImage(temppValues >= level);
         tempImage = zeros(size(currentImage));
-        tempImage(temppValues >= 0.00000001) = outlierPixels;
+        tempImage(temppValues >= level) = outlierPixels;
         
-        intensities = tempImage(:); % new intensity distribution without extreme values; to be fitted
 
-
+        % Apply multi-itinery fitting when images contain bad (extreme bright outliers) clusters that can distort the intensity distribution
+        if tempSigma > 500 % an empirical value of sigma that distinguish bad fit results from good ones
         
-        % Second itinerary of fitting a normal distribution to the pixel intensities
-        pd = fitdist(intensities, 'Normal');
+            intensities = tempImage(:); % new intensity distribution without extreme values; to be fitted
 
-        % Estimate mean and variance using percentiles
-        lowerPercentile = 25;
-        upperPercentile = 75;
-        lowerThreshold = pd.icdf(lowerPercentile / 100);
-        upperThreshold = pd.icdf(upperPercentile / 100);
-        
-        % Calculate IQR (Interquartile Range)
-        IQR = upperThreshold - lowerThreshold;
-        
-        % Estimate standard deviation for a normal distribution
-        sigma(i) = IQR / 1.349;
-        
-        % Calculate mean using the median (assuming symmetry in a normal distribution)
-        mu(i) = (upperThreshold + lowerThreshold) / 2;
+            % Second itinerary of fitting a normal distribution to the pixel intensities
+            pd = fitdist(intensities, 'Normal');
+    
+            % Estimate mean and variance using percentiles
+            lowerPercentile = 25;
+            upperPercentile = 75;
+            lowerThreshold = pd.icdf(lowerPercentile / 100);
+            upperThreshold = pd.icdf(upperPercentile / 100);
+            
+            % Calculate IQR (Interquartile Range)
+            IQR = upperThreshold - lowerThreshold;
+            
+            % Estimate standard deviation for a normal distribution
+            sigma(i) = IQR / 1.349;
+            
+            % Calculate mean using the median (assuming symmetry in a normal distribution)
+            mu(i) = (upperThreshold + lowerThreshold) / 2;
+    
+            % Filter out pixels with right-sided p-value below 0.01% 2.5 sigma 0.006%
+            pThreshold = 0.05;
+            pValues = 1 - cdf(pd, intensities);
+            filteredPixels = currentImage(pValues < pThreshold);
+    
+            % Create a new image with filtered pixels
+            processedImage = zeros(size(currentImage));
+            processedImage(pValues < pThreshold) = filteredPixels;
 
-        % Filter out pixels with right-sided p-value below 2.5 sigma 0.006%
-        pThreshold = 0.05;
-        pValues = 1 - cdf(pd, intensities);
-        filteredPixels = currentImage(pValues < pThreshold);
+        else
 
-        % Create a new image with filtered pixels
-        processedImage = zeros(size(currentImage));
-        processedImage(pValues < pThreshold) = filteredPixels;
+            intensities = currentImage(:); % new intensity distribution without extreme values; to be fitted
+
+            % Second itinerary of fitting a normal distribution to the pixel intensities
+            pd = fitdist(intensities, 'Normal');
+    
+            % Estimate mean and variance using percentiles
+            lowerPercentile = 25;
+            upperPercentile = 75;
+            lowerThreshold = pd.icdf(lowerPercentile / 100);
+            upperThreshold = pd.icdf(upperPercentile / 100);
+            
+            % Calculate IQR (Interquartile Range)
+            IQR = upperThreshold - lowerThreshold;
+            
+            % Estimate standard deviation for a normal distribution
+            sigma(i) = IQR / 1.349;
+            
+            % Calculate mean using the median (assuming symmetry in a normal distribution)
+            mu(i) = (upperThreshold + lowerThreshold) / 2;
+    
+            % Filter out pixels with right-sided p-value below 0.01% 2.5 sigma 0.006%
+            pThreshold = 0.05;
+            pValues = 1 - cdf(pd, intensities);
+            filteredPixels = currentImage(pValues < pThreshold);
+    
+            % Create a new image with filtered pixels
+            processedImage = zeros(size(currentImage));
+            processedImage(pValues < pThreshold) = filteredPixels;
+        end
         
         % Smoothen the image with a 3x3 median filter
         smoothenedImage = medfilt2(processedImage, [3 3]);

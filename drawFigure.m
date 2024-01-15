@@ -1,4 +1,4 @@
-function drawFigure(averagedStacksList, posList, dataPath, imageName)
+function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
     
     warning('off','MATLAB:MKDIR:DirectoryExists')
     figPath = [dataPath '\Figures'];
@@ -13,18 +13,20 @@ function drawFigure(averagedStacksList, posList, dataPath, imageName)
         currentImage = averagedStacksList{imageNum};
         aggregateImage = zeros(size(currentImage));
         
-        aggregateListOftheImage = struct('objectIndex', {}, 'PixelPosX', {}, 'PixelPosY', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
-        for listNum = 1:numel(posList)
-            if posList(listNum).imageNum == imageNum
-                aggregateListOftheImage(end+1) = posList(listNum);
+        aggregateListOftheImage = struct('objectIndex', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
+        for listNum = 1:numel(filteredPosList)
+            if filteredPosList(listNum).imageNum == imageNum
+                aggregateListOftheImage(end+1) = filteredPosList(listNum);
             end
         end
 
 
         for i = 1:length(aggregateListOftheImage)
-            x = aggregateListOftheImage(i).PixelPosX;
-            y = aggregateListOftheImage(i).PixelPosY;
-            aggregateImage(y, x) = 1;  % Note the reversal of x and y here
+            if ~isnan(aggregateListOftheImage(i).CentroidPosX) == 1
+                x = aggregateListOftheImage(i).CentroidPosX;
+                y = aggregateListOftheImage(i).CentroidPosY;
+                aggregateImage(round(y), round(x)) = 1;  % Note the reversal of x and y here
+            end
         end
         
         if isempty(aggregateListOftheImage) == 1

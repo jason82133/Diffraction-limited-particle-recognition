@@ -3,7 +3,7 @@
 
 %% Setting
 
-path = 'G:\Arabidopsis\20240110_Simpull_Syn_Serum dilution'; % Direct to the main folder to be analysed
+path = 'H:\Jason\20240115_Simpull_Syn_Serum dilution'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
@@ -37,11 +37,11 @@ if ~isempty(subfolderNames)
         disp('Finding aggregates..')
         objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma);
         [objectList, posList] = organizeObjectData(objects);
-        filteredList = filterData(objectList);
+        [filteredList, filteredPosList] = filterData(objectList, posList);
 
         disp('Saving data..')
         dataPath = export(filteredList, Save_path, folderName);
-        drawFigure(averagedStacksList, posList, dataPath, imageName);
+        drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
     end
 else
     folderPath = path;
@@ -55,11 +55,11 @@ else
     disp('Finding aggregates..')
     objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma);
     [objectList, posList] = organizeObjectData(objects);
-    filteredList = filterData(objectList);
+    [filteredList, filteredPosList] = filterData(objectList, posList);
     
     disp('Saving data..')
     dataPath = export(filteredList, Save_path, folderName);
-    drawFigure(averagedStacksList, posList, dataPath, imageName);
+    drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
 end
 
 disp('Completed!')

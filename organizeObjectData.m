@@ -32,15 +32,18 @@ function [objectList, posList] = organizeObjectData(objects)
             BackgroundStd = objectData{j}.StDOfBackground;
             CentroidPositionsX = objectData{j}.CentroidPositions(1);
             CentroidPositionsY = objectData{j}.CentroidPositions(2);
+            
 
             % Loop through each pixel in the current object
-            for k = 1:numel(objectData{j}.PixelPositions(:,1))
-                posX = objectData{j}.PixelPositions(k,2);
-                posY = objectData{j}.PixelPositions(k,1);
-
-                tempPosList = [tempPosList; j, posX, posY, CentroidPositionsX, CentroidPositionsY, i];
-                imagePosList = [imagePosList; {objectData{j}.imageName}];
-            end
+            % for k = 1:numel(objectData{j}.PixelPositions(:,1))
+            %     posX = objectData{j}.PixelPositions(k,2);
+            %     posY = objectData{j}.PixelPositions(k,1);
+            % 
+            %     tempPosList = [tempPosList; j, posX, posY, CentroidPositionsX, CentroidPositionsY, i];
+            %     imagePosList = [imagePosList; {objectData{j}.imageName}];
+            % end
+            tempPosList = [tempPosList; j, CentroidPositionsX, CentroidPositionsY, i];
+            imagePosList = [imagePosList; {objectData{j}.imageName}];
 
             % Append the properties in an image to the temp list
             tempList = [tempList; j, sumIntensity, avgPixelIntensity, SB_diff, numPixels, Eccentricity, BackgroundMean, BackgroundStd, i];
@@ -72,15 +75,13 @@ function [objectList, posList] = organizeObjectData(objects)
         [objectList.wellName] = wellList{:};
     end
     
-    posList = struct('objectIndex', {}, 'PixelPosX', {}, 'PixelPosY', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
+    posList = struct('objectIndex', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
     posList = repmat(posList, length(tempPosList), 1);
     for numPos = 1:length(tempPosList)
         posList(numPos).objectIndex = tempPosList(numPos,1);
-        posList(numPos).PixelPosX = tempPosList(numPos,2);
-        posList(numPos).PixelPosY = tempPosList(numPos,3);
-        posList(numPos).CentroidPosX = tempPosList(numPos,4);
-        posList(numPos).CentroidPosY = tempPosList(numPos,5);
-        posList(numPos).imageNum = tempPosList(numPos,6);
+        posList(numPos).CentroidPosX = tempPosList(numPos,2);
+        posList(numPos).CentroidPosY = tempPosList(numPos,3);
+        posList(numPos).imageNum = tempPosList(numPos,4);
     end
     
     if ~isempty(objectList) == 1

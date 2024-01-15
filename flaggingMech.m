@@ -30,7 +30,9 @@ function temp = flaggingMech(filteredList)
         filteredIndices_BackgroundMean = find(data_BackgroundMean > highThreshold | data_BackgroundMean < lowThreshold);
         
         if ~isempty(filteredIndices_BackgroundMean) == 1
-            filteredPos = find(ismember(Data_imageName, uniqueImage{filteredIndices_BackgroundMean}));
+            for i = 1:numel(filteredIndices_BackgroundMean)
+                filteredPos{i} = find(ismember(Data_imageName, uniqueImage{filteredIndices_BackgroundMean(i)}));
+            end
         else
             filteredPos = [];
         end
@@ -43,7 +45,9 @@ function temp = flaggingMech(filteredList)
 
         if ~isempty(filteredPos) == 1
             for filteredNum_b = 1:numel(filteredPos)
-                temp{filteredPos(filteredNum_b)} = 'b';
+                for k = 1: numel(filteredPos{filteredNum_b})
+                    temp{filteredPos{filteredNum_b}(k)} = 'b';
+                end
             end
         end
     end
