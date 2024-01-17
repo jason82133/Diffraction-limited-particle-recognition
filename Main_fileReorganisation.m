@@ -1,14 +1,15 @@
 % Copyright (c) 2023, by Jason C Sang.
 
 %% Setting
+clear all
 
 % Specify the folder path to search for Excel files which belong to one single slide
-folderPath_1 = 'G:\Arabidopsis\20240110_Simpull_Syn_Serum dilution\Analysis no truncated frames_new code\Analysis 2024-01-11_19-35-25';
-folderPath_2 = 'G:\Arabidopsis\20240110_Simpull_Syn_Serum dilution\Analysis no truncated frames_new code\Analysis 2024-01-11_19-57-41';
-
+folder_1 = 'Analysis 2024-01-17_22-14-09';
+folder_2 = 'Analysis 2024-01-17_22-18-39';
+savePath = 'G:\Arabidopsis\20240115_Simpull_Syn_Serum dilution\Analysis smoothSize = 3, CV=20%, floating fitting pValue_modified';
 
 % Add a column of the slide label
-slide_Name = '240104-P';
+slide_Name = '20240115-Q';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
@@ -19,11 +20,17 @@ newValues = {'Y3', 'Y2', 'Y1'};
 %%
 
 % Define the file filter for Excel files
-fileFilter = {'*.xlsx', '*.xls'};
+fileFilter = {'*Output_*.xlsx', '*Output_*.xls'};
 
- % Get a list of all files in the specified path and its subfolders
-allFiles(1) = dir(fullfile(folderPath_1, '**', fileFilter{1}));
-allFiles(2) = dir(fullfile(folderPath_2, '**', fileFilter{1}));
+% Get a list of all files in the specified path and its subfolders
+folderPath_1 = [savePath, '\', folder_1];
+folderPath_2 = [savePath, '\', folder_2];
+
+aa = dir(fullfile(folderPath_1, '**', fileFilter{1}));
+bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
+
+allFiles(1) = aa(1);
+allFiles(2) = bb(1);
 
 % Load the files
 table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
@@ -110,5 +117,10 @@ outputTable = addvars(outputTable, slideName, 'Before', 1);
 % 
 % uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.40,0.88,0.075,0.075], 'String', 'X', 'FontSize', 12.5);
 % uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.90,0.36,0.075,0.075], 'String', 'Y', 'FontSize', 12.5);
-% 
-% 
+
+
+%%
+% Write the table to an Excel file
+writetable(outputTable, [savePath '\Output_' slide_Name '.xlsx']);
+
+disp('Data saved');

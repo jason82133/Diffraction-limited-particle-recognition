@@ -13,8 +13,6 @@ function [objectList, posList] = organizeObjectData(objects)
 
     % Loop through each image
     for i = 1:numImages
-        disp([num2str(i/numImages*100) ' %'])
-        
         objectData = objects{i};
 
         %folderList{i} = objectData{i}.folderName;
@@ -52,6 +50,8 @@ function [objectList, posList] = organizeObjectData(objects)
             wellList = [wellList; {objectData{j}.wellName}];
         end
         clear objectData
+
+        disp([num2str(round(i/numImages*100, 1)) ' %'])
     end
 
     % Append the properties to the organized list

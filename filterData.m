@@ -1,5 +1,5 @@
-function [filteredList, filteredPosList] = filterData(originalStruct, posList)
-    % Filter rows in a structure based on criteria (Eccentricity >= 0.2, numOfPixels > 10, and numOfPixels < 100)
+function [filteredList, filteredPosList, areaThreshold] = filterData(originalStruct, posList)
+    % Filter rows in a structure based on criteria
 
     % Initialize the filtered structure
     filteredList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'BackgroundMean', {}, 'BackgroundStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {});
@@ -12,8 +12,9 @@ function [filteredList, filteredPosList] = filterData(originalStruct, posList)
         numOfPixels = originalStruct(i).NumOfPixels;
 
         % Check the criteria
-        %if eccentricity >= 0.3 && numOfPixels > 2 && numOfPixels < 100
-        if numOfPixels > 3 && numOfPixels < 200
+        areaThreshold = [2, 200];
+
+        if numOfPixels > areaThreshold(1) && numOfPixels < areaThreshold(2)
             % Add the entry to the filtered structurec
             filteredList(end + 1) = originalStruct(i);
             filteredPosList(end + 1) = posList(i);

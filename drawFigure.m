@@ -5,8 +5,6 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
     mkdir(figPath);
     
     for imageNum = 1:numel(averagedStacksList)
-        disp([num2str(imageNum/numel(averagedStacksList)*100) ' %'])
-
         clear currentImage
 
         % Display the original and processed images for comparison
@@ -26,11 +24,18 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
                 x = aggregateListOftheImage(i).CentroidPosX;
                 y = aggregateListOftheImage(i).CentroidPosY;
                 aggregateImage(round(y), round(x)) = 1;  % Note the reversal of x and y here
+                aggregateImage(round(y+1), round(x)) = 1;
+                aggregateImage(round(y-1), round(x)) = 1;
+                aggregateImage(round(y), round(x+1)) = 1;
+                aggregateImage(round(y), round(x-1)) = 1;
+                aggregateImage(round(y+1), round(x+1)) = 1;
+                aggregateImage(round(y+1), round(x-1)) = 1;
+                aggregateImage(round(y-1), round(x+1)) = 1;
+                aggregateImage(round(y-1), round(x-1)) = 1;
             end
         end
         
         if isempty(aggregateListOftheImage) == 1
-            disp(imageName{imageNum})
             aggregateListOftheImage(1).imageName = imageName{imageNum};
         end
 
@@ -48,14 +53,16 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
         subplot(1, 2, 2);
         imagesc(aggregateImage);
         title('Identified ROIs');
-        for j = 1:length(aggregateListOftheImage)
-            text((aggregateListOftheImage(j).CentroidPosX)+1, (aggregateListOftheImage(j).CentroidPosY)+7,['\color{red} ' num2str(aggregateListOftheImage(j).objectIndex)], 'FontSize', 8);
-        end
+        % for j = 1:length(aggregateListOftheImage)
+        %     text((aggregateListOftheImage(j).CentroidPosX)+1, (aggregateListOftheImage(j).CentroidPosY)+7,['\color{red} ' num2str(aggregateListOftheImage(j).objectIndex)], 'FontSize', 4);
+        % end
         colormap;
         colorbar;
 
         hold on
         saveas(gcf, [figPath '\' num2str(aggregateListOftheImage(1).imageName) '.png']);
+        
+        disp([num2str(round((imageNum/numel(averagedStacksList)*100)), 3) ' %'])
     end
     close all
 end
