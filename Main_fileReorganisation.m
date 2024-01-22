@@ -4,12 +4,12 @@
 clear all
 
 % Specify the folder path to search for Excel files which belong to one single slide
-folder_1 = 'Analysis 2024-01-17_22-14-09';
-folder_2 = 'Analysis 2024-01-17_22-18-39';
-savePath = 'G:\Arabidopsis\20240115_Simpull_Syn_Serum dilution\Analysis smoothSize = 3, CV=20%, floating fitting pValue_modified';
+folder_1 = '';
+folder_2 = 'Analysis 2024-01-22_17-25-03'; % Folder to replace the X-Y coordinates
+savePath = 'D:\Arabidopsis\20240122_Simpull_Syn_tween20 time course';
 
 % Add a column of the slide label
-slide_Name = '20240115-Q';
+slide_Name = '20240122-J';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
@@ -22,45 +22,81 @@ newValues = {'Y3', 'Y2', 'Y1'};
 % Define the file filter for Excel files
 fileFilter = {'*Output_*.xlsx', '*Output_*.xls'};
 
-% Get a list of all files in the specified path and its subfolders
-folderPath_1 = [savePath, '\', folder_1];
-folderPath_2 = [savePath, '\', folder_2];
-
-aa = dir(fullfile(folderPath_1, '**', fileFilter{1}));
-bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
-
-allFiles(1) = aa(1);
-allFiles(2) = bb(1);
-
-% Load the files
-table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
-table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
-
-
-if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
-    % Convert the column to a cell array of strings
-    imageName_data = cellstr(table_2.imageName);
-    wellName_data = cellstr(table_2.wellName);
+if ~isempty(folder_1)
+    % Get a list of all files in the specified path and its subfolders
+    folderPath_1 = [savePath, '\', folder_1];
+    folderPath_2 = [savePath, '\', folder_2];
     
-    % Loop through each old value and perform replacement
-    for i = 1:numel(oldValues)
-        % Find indices of rows containing the old value
-        imageNameIndices = contains(imageName_data, oldValues{i});
-        wellNameIndices = contains(wellName_data, oldValues{i});
+    aa = dir(fullfile(folderPath_1, '**', fileFilter{1}));
+    bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
     
-        % Replace the old value with the new value
-        imageName_data(imageNameIndices) = strrep(imageName_data(imageNameIndices), oldValues{i}, newValues{i});
-        wellName_data(imageNameIndices) = strrep(wellName_data(wellNameIndices), oldValues{i}, newValues{i});
+    allFiles(1) = aa(1);
+    allFiles(2) = bb(1);
+    
+    % Load the files
+    table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
+    table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
+    
+    
+    if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
+        % Convert the column to a cell array of strings
+        imageName_data = cellstr(table_2.imageName);
+        wellName_data = cellstr(table_2.wellName);
+        
+        % Loop through each old value and perform replacement
+        for i = 1:numel(oldValues)
+            % Find indices of rows containing the old value
+            imageNameIndices = contains(imageName_data, oldValues{i});
+            wellNameIndices = contains(wellName_data, oldValues{i});
+        
+            % Replace the old value with the new value
+            imageName_data(imageNameIndices) = strrep(imageName_data(imageNameIndices), oldValues{i}, newValues{i});
+            wellName_data(imageNameIndices) = strrep(wellName_data(wellNameIndices), oldValues{i}, newValues{i});
+        end
+        
+         % Update the table with the modified column
+        table_2.imageName = imageName_data;
+        table_2.wellName = wellName_data;
     end
     
-     % Update the table with the modified column
-    table_2.imageName = imageName_data;
-    table_2.wellName = wellName_data;
+    % Join two tables
+    joinedTable = vertcat(table_1, table_2);
+
+else
+    folderPath_2 = [savePath, '\', folder_2];
+    
+    bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
+    
+    allFiles(2) = bb(1);
+    
+    % Load the files
+    table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
+    
+    
+    if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
+        % Convert the column to a cell array of strings
+        imageName_data = cellstr(table_2.imageName);
+        wellName_data = cellstr(table_2.wellName);
+        
+        % Loop through each old value and perform replacement
+        for i = 1:numel(oldValues)
+            % Find indices of rows containing the old value
+            imageNameIndices = contains(imageName_data, oldValues{i});
+            wellNameIndices = contains(wellName_data, oldValues{i});
+        
+            % Replace the old value with the new value
+            imageName_data(imageNameIndices) = strrep(imageName_data(imageNameIndices), oldValues{i}, newValues{i});
+            wellName_data(imageNameIndices) = strrep(wellName_data(wellNameIndices), oldValues{i}, newValues{i});
+        end
+        
+         % Update the table with the modified column
+        table_2.imageName = imageName_data;
+        table_2.wellName = wellName_data;
+    end
+    
+    % Join two tables
+    joinedTable = table_2;
 end
-
-% Join two tables
-joinedTable = vertcat(table_1, table_2);
-
 
 outputTable = movevars(joinedTable, 'imageNum', 'Before', 'objectIndex');
 outputTable = movevars(outputTable, 'imageName', 'Before', 'imageNum');
