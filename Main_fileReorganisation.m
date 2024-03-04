@@ -4,17 +4,17 @@
 clear all
 
 % Specify the folder path to search for Excel files which belong to one single slide
-folder_1 = '';
-folder_2 = 'Analysis 2024-01-22_17-25-03'; % Folder to replace the X-Y coordinates
-savePath = 'D:\Arabidopsis\20240122_Simpull_Syn_tween20 time course';
+folder_1 = 'Analysis 2024-02-29_22-34-03';
+folder_2 = 'Analysis 2024-02-29_22-35-38'; % Folder to replace the X-Y coordinates
+savePath = 'G:\Work\Arabidopsis\20240229_Simpull_Syn_StabilCoat_day0';
 
 % Add a column of the slide label
-slide_Name = '20240122-J';
+slide_Name = '20240218-B';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
-oldValues = {'Y2', 'Y1', 'Y0'};
-newValues = {'Y3', 'Y2', 'Y1'};
+oldValues = {'Y1', 'Y0'};
+newValues = {'Y3', 'Y2'};
 
 
 %%

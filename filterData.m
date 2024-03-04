@@ -12,7 +12,7 @@ function [filteredList, filteredPosList, areaThreshold] = filterData(originalStr
         numOfPixels = originalStruct(i).NumOfPixels;
 
         % Check the criteria
-        areaThreshold = [2, 200];
+        areaThreshold = [2, 300];
 
         if numOfPixels > areaThreshold(1) && numOfPixels < areaThreshold(2)
             % Add the entry to the filtered structurec

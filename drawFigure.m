@@ -9,8 +9,9 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
 
         % Display the original and processed images for comparison
         currentImage = averagedStacksList{imageNum};
-        aggregateImage = zeros(size(currentImage));
-        
+        %aggregateImage = zeros(size(currentImage));
+        aggregateImage = currentImage;
+                
         aggregateListOftheImage = struct('objectIndex', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
         for listNum = 1:numel(filteredPosList)
             if filteredPosList(listNum).imageNum == imageNum
@@ -19,21 +20,22 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
         end
 
 
-        for i = 1:length(aggregateListOftheImage)
-            if ~isnan(aggregateListOftheImage(i).CentroidPosX) == 1
-                x = aggregateListOftheImage(i).CentroidPosX;
-                y = aggregateListOftheImage(i).CentroidPosY;
-                aggregateImage(round(y), round(x)) = 1;  % Note the reversal of x and y here
-                aggregateImage(round(y+1), round(x)) = 1;
-                aggregateImage(round(y-1), round(x)) = 1;
-                aggregateImage(round(y), round(x+1)) = 1;
-                aggregateImage(round(y), round(x-1)) = 1;
-                aggregateImage(round(y+1), round(x+1)) = 1;
-                aggregateImage(round(y+1), round(x-1)) = 1;
-                aggregateImage(round(y-1), round(x+1)) = 1;
-                aggregateImage(round(y-1), round(x-1)) = 1;
-            end
-        end
+        % for i = 1:length(aggregateListOftheImage)
+        %     if ~isnan(aggregateListOftheImage(i).CentroidPosX) == 1
+        %         x = aggregateListOftheImage(i).CentroidPosX;
+        %         y = aggregateListOftheImage(i).CentroidPosY;
+        % 
+        %         aggregateImage(round(y), round(x)) = 1;  % Note the reversal of x and y here
+        %         aggregateImage(round(y+1), round(x)) = 1;
+        %         aggregateImage(round(y-1), round(x)) = 1;
+        %         aggregateImage(round(y), round(x+1)) = 1;
+        %         aggregateImage(round(y), round(x-1)) = 1;
+        %         aggregateImage(round(y+1), round(x+1)) = 1;
+        %         aggregateImage(round(y+1), round(x-1)) = 1;
+        %         aggregateImage(round(y-1), round(x+1)) = 1;
+        %         aggregateImage(round(y-1), round(x-1)) = 1;
+        %     end
+        % end
         
         if isempty(aggregateListOftheImage) == 1
             aggregateListOftheImage(1).imageName = imageName{imageNum};
@@ -52,10 +54,16 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
         
         subplot(1, 2, 2);
         imagesc(aggregateImage);
-        title('Identified ROIs');
-        % for j = 1:length(aggregateListOftheImage)
-        %     text((aggregateListOftheImage(j).CentroidPosX)+1, (aggregateListOftheImage(j).CentroidPosY)+7,['\color{red} ' num2str(aggregateListOftheImage(j).objectIndex)], 'FontSize', 4);
-        % end
+        title('Identified aggregates');
+        for j = 1:length(aggregateListOftheImage)
+            % text((aggregateListOftheImage(j).CentroidPosX)+1, (aggregateListOftheImage(j).CentroidPosY)+7,['\color{red} ' num2str(aggregateListOftheImage(j).objectIndex)], 'FontSize', 4);
+            x = round(aggregateListOftheImage(j).CentroidPosX);
+            y = round(aggregateListOftheImage(j).CentroidPosY);
+
+            if ~isnan(aggregateListOftheImage(j).CentroidPosX) == 1
+                text(x-7, y,'O', 'Color', '#7E2F8E', 'FontSize', 10);
+            end
+        end
         colormap;
         colorbar;
 

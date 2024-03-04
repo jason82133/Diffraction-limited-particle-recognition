@@ -3,7 +3,7 @@
 
 %% Setting
 
-path = 'D:\Arabidopsis\20240122_Simpull_Syn_tween20 time course'; % Direct to the main folder to be analysed
+path = 'G:\Work\Arabidopsis\20240229_Simpull_Syn_StabilCoat_day0'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
@@ -40,7 +40,7 @@ if ~isempty(subfolderNames)
         [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
 
         disp('Saving data..')
-        dataPath = export(filteredList, Save_path, folderName, smoothSize, areaThreshold);
+        dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
         drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
     end
 else
@@ -58,7 +58,7 @@ else
     [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
     
     disp('Saving data..')
-    dataPath = export(filteredList, Save_path, folderName, smoothSize, areaThreshold);
+    dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
     drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
 end
 
