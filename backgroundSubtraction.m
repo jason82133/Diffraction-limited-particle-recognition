@@ -1,4 +1,4 @@
-function [outputImageList, mu, sigma, smoothSize] = backgroundSubtraction(averagedStacksList)
+function [outputImageList, mu, sigma, smoothSize, pThreshold] = backgroundSubtraction(averagedStacksList)
     % Initialize cell array to store processed images
     outputImageList = cell(size(averagedStacksList));
 
@@ -12,7 +12,8 @@ function [outputImageList, mu, sigma, smoothSize] = backgroundSubtraction(averag
 
         %currentImage = imresize(currentImage, 10,'nearest');
         %currentImage = imgaussfilt(currentImage, 1);
-
+        
+        % Top-hat filtering
         smoothSize = 3;
         se = strel('disk', smoothSize);
         currentImage = imtophat(currentImage, se);

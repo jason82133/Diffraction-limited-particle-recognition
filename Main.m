@@ -3,7 +3,7 @@
 
 %% Setting
 
-path = 'G:\Work\Arabidopsis\20240229_Simpull_Syn_StabilCoat_day0'; % Direct to the main folder to be analysed
+path = 'D:\Work\Artemisia\20240302_Simpull_Syn_sample handling\2024-03-02_21-58-11_SIMOAComparison_6mW_150um_X=1'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
@@ -32,7 +32,7 @@ if ~isempty(subfolderNames)
         [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
 
         disp('Subtracting background..')
-        [outputImageList, mu, sigma, smoothSize] = backgroundSubtraction(averagedStacksList);
+        [outputImageList, mu, sigma, smoothSize, pThreshold] = backgroundSubtraction(averagedStacksList);
 
         disp('Finding aggregates..')
         objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma);
@@ -40,7 +40,7 @@ if ~isempty(subfolderNames)
         [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
 
         disp('Saving data..')
-        dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
+        dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize, pThreshold);
         drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
     end
 else
@@ -50,7 +50,7 @@ else
     [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
     
     disp('Subtracting background..')
-    [outputImageList, mu, sigma, smoothSize] = backgroundSubtraction(averagedStacksList);
+    [outputImageList, mu, sigma, smoothSize, pThreshold] = backgroundSubtraction(averagedStacksList);
     
     disp('Finding aggregates..')
     objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma);
@@ -58,7 +58,7 @@ else
     [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
     
     disp('Saving data..')
-    dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
+    dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize, pThreshold);
     drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
 end
 
