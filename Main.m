@@ -3,7 +3,7 @@
 
 %% Setting
 
-path = 'D:\Work\Artemisia\20240302_Simpull_Syn_sample handling\2024-03-02_21-58-11_SIMOAComparison_6mW_150um_X=1'; % Direct to the main folder to be analysed
+path = 'G:\Work\Artemisia\20240302_Simpull_Syn_sample handling'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 

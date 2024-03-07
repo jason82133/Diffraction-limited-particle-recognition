@@ -1,4 +1,4 @@
-function savePath = export(file, filePath, folderName, smoothSize, areaThreshold, pThreshold)
+function savePath = export(file, filePath, folderName, areaThreshold, smoothSize, pThreshold)
     %% Results    
     % Convert the structure to a table
     dataTable = struct2table(file);
@@ -25,7 +25,7 @@ function savePath = export(file, filePath, folderName, smoothSize, areaThreshold
     % Write the variables to the file
     fprintf(logFile, 'Threshold for intensity histogram above percentage: %f\n', pThreshold);
     fprintf(logFile, 'Smoothing of n-sized pixels for top-hat and median filtering: %d\n', smoothSize);
-    fprintf(logFile, 'Exclude particles between n pixels: %d, %d', areaThreshold);
+    fprintf(logFile, 'Exclude particles between n pixels: %d\n', areaThreshold);
     
     % Close the file
     fclose(logFile);
