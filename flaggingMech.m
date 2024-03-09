@@ -13,11 +13,11 @@ function temp = flaggingMech(filteredList)
         wellPos = find(ismember(find(ismember(Data_wellName, uniqueWell{wellNum})), firstImagePos)); % select the well that has objectOndex of 1 and the specified well name
 
         for j = 1:numel(wellPos)
-            data_BackgroundMean(j) = filteredList(wellPos(j)).BackgroundMean;
+            data_ImageMean(j) = filteredList(wellPos(j)).ImageMean;
         end 
 
-        mean_b = mean(data_BackgroundMean);
-        std_b = std(data_BackgroundMean);
+        mean_b = mean(data_ImageMean);
+        std_b = std(data_ImageMean);
         
         % Define the range for threshold is +-10% of the mean
         level = 0.1;
@@ -27,11 +27,11 @@ function temp = flaggingMech(filteredList)
         lowThreshold = mean_b*(1 - level);
         
         % Identify elements with p-value > 2 sigma
-        filteredIndices_BackgroundMean = find(data_BackgroundMean > highThreshold | data_BackgroundMean < lowThreshold);
+        filteredIndices_ImageMean = find(data_ImageMean > highThreshold | data_ImageMean < lowThreshold);
         
-        if ~isempty(filteredIndices_BackgroundMean) == 1
-            for i = 1:numel(filteredIndices_BackgroundMean)
-                filteredPos{i} = find(ismember(Data_imageName, uniqueImage{filteredIndices_BackgroundMean(i)}));
+        if ~isempty(filteredIndices_ImageMean) == 1
+            for i = 1:numel(filteredIndices_ImageMean)
+                filteredPos{i} = find(ismember(Data_imageName, uniqueImage{filteredIndices_ImageMean(i)}));
             end
         else
             filteredPos = [];

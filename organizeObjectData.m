@@ -26,8 +26,9 @@ function [objectList, posList] = organizeObjectData(objects)
             SB_diff = objectData{j}.SBdiff;
             numPixels = objectData{j}.NumPixels;
             Eccentricity = objectData{j}.Eccentricity;
-            BackgroundMean = objectData{j}.MeanOfBackground;
-            BackgroundStd = objectData{j}.StDOfBackground;
+            Background = objectData{j}.Background;
+            ImageMean = objectData{j}.MeanOfImage;
+            ImageStd = objectData{j}.StDOfImage;
             CentroidPositionsX = objectData{j}.CentroidPositions(1);
             CentroidPositionsY = objectData{j}.CentroidPositions(2);
             
@@ -44,7 +45,7 @@ function [objectList, posList] = organizeObjectData(objects)
             imagePosList = [imagePosList; {objectData{j}.imageName}];
 
             % Append the properties in an image to the temp list
-            tempList = [tempList; j, sumIntensity, avgPixelIntensity, SB_diff, numPixels, Eccentricity, BackgroundMean, BackgroundStd, i];
+            tempList = [tempList; j, sumIntensity, avgPixelIntensity, SB_diff, numPixels, Eccentricity, Background, ImageMean, ImageStd, i];
             folderList = [folderList; {objectData{j}.folderName}];
             imageList = [imageList; {objectData{j}.imageName}];
             wellList = [wellList; {objectData{j}.wellName}];
@@ -56,7 +57,7 @@ function [objectList, posList] = organizeObjectData(objects)
 
     % Append the properties to the organized list
     
-    objectList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'BackgroundMean', {}, 'BackgroundStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {});
+    objectList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'Background', {}, 'ImageMean', {}, 'ImageStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {});
     objectList = repmat(objectList, length(tempList), 1);
     for num = 1:length(tempList)
        objectList(num).objectIndex = tempList(num,1);
@@ -65,9 +66,10 @@ function [objectList, posList] = organizeObjectData(objects)
        objectList(num).SB_diff = tempList(num,4);
        objectList(num).NumOfPixels = tempList(num,5);
        objectList(num).Eccentricity = tempList(num,6);
-       objectList(num).BackgroundMean = tempList(num,7);
-       objectList(num).BackgroundStd = tempList(num,8);
-       objectList(num).imageNum = tempList(num,9);
+       objectList(num).Background = tempList(num,7);
+       objectList(num).ImageMean = tempList(num,8);
+       objectList(num).ImageStd = tempList(num,9);
+       objectList(num).imageNum = tempList(num,10);
     end
     if ~isempty(objectList) == 1
         [objectList.folderName] = folderList{:};

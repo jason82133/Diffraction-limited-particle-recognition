@@ -1,9 +1,12 @@
 
+% Diffraction-limited particle recognition (DLPR)
+% Version 1.1
+%
 % Copyright (c) 2023, by Jason C Sang.
 
 %% Setting
 
-path = 'G:\Work\Artemisia\20240302_Simpull_Syn_sample handling'; % Direct to the main folder to be analysed
+path = 'G:\Arabidopsis\20240308_Simpull_Syn_IgG_TruBlock conc\20240227_M_X1-2_2024-03-08_16-54-33'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
@@ -32,15 +35,15 @@ if ~isempty(subfolderNames)
         [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
 
         disp('Subtracting background..')
-        [outputImageList, mu, sigma, smoothSize, pThreshold] = backgroundSubtraction(averagedStacksList);
+        [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList);
 
         disp('Finding aggregates..')
-        objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma);
+        objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg);
         [objectList, posList] = organizeObjectData(objects);
         [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
 
         disp('Saving data..')
-        dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize, pThreshold);
+        dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
         drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
     end
 else
@@ -50,15 +53,15 @@ else
     [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
     
     disp('Subtracting background..')
-    [outputImageList, mu, sigma, smoothSize, pThreshold] = backgroundSubtraction(averagedStacksList);
+    [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList);
     
     disp('Finding aggregates..')
-    objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma);
+    objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg);
     [objectList, posList] = organizeObjectData(objects);
     [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
     
     disp('Saving data..')
-    dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize, pThreshold);
+    dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
     drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
 end
 
