@@ -1,14 +1,17 @@
 
 % Diffraction-limited particle recognition (DLPR)
-% Version 1.1
+% Version 1.11
 %
 % Copyright (c) 2023, by Jason C Sang.
 
+
+
 %% Setting
 
-path = 'G:\Arabidopsis\20240308_Simpull_Syn_IgG_TruBlock conc\20240227_M_X1-2_2024-03-08_16-54-33'; % Direct to the main folder to be analysed
+path = 'C:\Users\jason\OneDrive\Desktop\test'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
+
 
 
 %% Execution
@@ -32,13 +35,13 @@ if ~isempty(subfolderNames)
         folderPath = [path '\' subfolderNames{i}];
 
         disp(['Loading images from ' num2str(subfolderNames{i}) '..'])
-        [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
+        [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName, xName, yName] = readTIFF(folderPath, truncatedFrame);
 
         disp('Subtracting background..')
         [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList);
 
         disp('Finding aggregates..')
-        objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg);
+        objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg, xName, yName);
         [objectList, posList] = organizeObjectData(objects);
         [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
 
@@ -50,13 +53,13 @@ else
     folderPath = path;
 
     disp('Loading images from the current folder..')
-    [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame);
+    [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName, xName, yName] = readTIFF(folderPath, truncatedFrame);
     
     disp('Subtracting background..')
     [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList);
     
     disp('Finding aggregates..')
-    objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg);
+    objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg, xName, yName);
     [objectList, posList] = organizeObjectData(objects);
     [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
     

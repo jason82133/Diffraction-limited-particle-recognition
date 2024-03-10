@@ -6,6 +6,7 @@ function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(av
     outputImageList = cell(size(averagedStacksList));
 
     %pThreshold = 0.1; % right-tailed 2 sigma
+    smoothSize = 3;
 
     % Loop through each z-averaged image
     for i = 1:numel(averagedStacksList)
@@ -43,7 +44,6 @@ function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(av
             currentImage = tempImage;
       
             % Top-hat filtering
-            smoothSize = 3;
             se = strel('disk', smoothSize);
             currentImage = imtophat(currentImage, se);
 
@@ -53,7 +53,6 @@ function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(av
             [pd, mm, ss] = normalDistribution(intensities);
         else
             % Top-hat filtering
-            smoothSize = 3;
             se = strel('disk', smoothSize);
             currentImage = imtophat(currentImage, se);
 

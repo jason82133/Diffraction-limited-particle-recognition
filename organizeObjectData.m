@@ -10,6 +10,8 @@ function [objectList, posList] = organizeObjectData(objects)
     folderList = [];
     imageList = [];
     wellList = [];
+    xList = [];
+    yList = [];
 
     % Loop through each image
     for i = 1:numImages
@@ -49,6 +51,8 @@ function [objectList, posList] = organizeObjectData(objects)
             folderList = [folderList; {objectData{j}.folderName}];
             imageList = [imageList; {objectData{j}.imageName}];
             wellList = [wellList; {objectData{j}.wellName}];
+            xList = [xList; {objectData{j}.xName}];
+            yList = [yList; {objectData{j}.yName}];
         end
         clear objectData
 
@@ -57,7 +61,7 @@ function [objectList, posList] = organizeObjectData(objects)
 
     % Append the properties to the organized list
     
-    objectList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'Background', {}, 'ImageMean', {}, 'ImageStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {});
+    objectList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'Background', {}, 'ImageMean', {}, 'ImageStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {}, 'X', {}, 'Y', {});
     objectList = repmat(objectList, length(tempList), 1);
     for num = 1:length(tempList)
        objectList(num).objectIndex = tempList(num,1);
@@ -75,6 +79,8 @@ function [objectList, posList] = organizeObjectData(objects)
         [objectList.folderName] = folderList{:};
         [objectList.imageName] = imageList{:};
         [objectList.wellName] = wellList{:};
+        [objectList.X] = xList{:};
+        [objectList.Y] = yList{:};
     end
     
     posList = struct('objectIndex', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
