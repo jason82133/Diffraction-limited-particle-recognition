@@ -1,6 +1,6 @@
 
 % Diffraction-limited particle recognition (DLPR)
-% Version 1.11
+% Version 1.12
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -8,7 +8,7 @@
 
 %% Setting
 
-path = 'C:\Users\jason\OneDrive\Desktop\test'; % Direct to the main folder to be analysed
+path = 'C:\Users\jason\Desktop\test'; % Direct to the main folder to be analysed
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 

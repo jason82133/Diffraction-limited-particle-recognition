@@ -86,8 +86,12 @@ function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(av
         smoothenedImage = medfilt2(processedImage, [smoothSize smoothSize]);
 
         % Create a new image with smoothened pixels
-        outputImage = zeros(size(processedImage));
-        outputImage((processedImage) > 0 & (smoothenedImage > 0)) = processedImage((processedImage) > 0 & (smoothenedImage > 0));
+        % outputImage = zeros(size(processedImage));
+        % outputImage((processedImage) > 0 & (smoothenedImage > 0)) = processedImage((processedImage) > 0 & (smoothenedImage > 0));
+
+        outputImage = averagedStacksList{i};
+        outputImage(~((processedImage) > 0 & (smoothenedImage > 0))) = 0;
+
         
         % Store the processed image
         outputImageList{i} = outputImage;
