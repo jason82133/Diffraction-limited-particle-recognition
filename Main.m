@@ -1,6 +1,6 @@
 
 % Diffraction-limited particle recognition (DLPR)
-% Version 1.12
+% Version 1.13
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -8,7 +8,7 @@
 
 %% Setting
 
-path = 'D:\Work\Arabidopsis\20240325_Simpull_abeta_antibody screening_641'; % Direct to the main folder to be analysed
+path = 'C:\Users\jason\OneDrive\Desktop\test\test'; % Direct to the main folder to be analysed
 
 InstrumentSetting = 1; % Arabidopsis 641nm = 1, Artemisia 641 nm = 2, Arabidopsis 488nm = 3
 
