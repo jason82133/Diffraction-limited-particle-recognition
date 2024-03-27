@@ -8,14 +8,16 @@
 
 %% Setting
 
-path = 'C:\Users\jason\Desktop\test'; % Direct to the main folder to be analysed
+path = 'D:\Work\Arabidopsis\20240325_Simpull_abeta_antibody screening_641'; % Direct to the main folder to be analysed
+
+InstrumentSetting = 1; % Arabidopsis 641nm = 1, Artemisia 641 nm = 2, Arabidopsis 488nm = 3
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
 
 
 %% Execution
-clearvars -except path truncatedFrame
+clearvars -except path InstrumentSetting truncatedFrame
 
 Save_path = path;
 
@@ -38,7 +40,7 @@ if ~isempty(subfolderNames)
         [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName, xName, yName] = readTIFF(folderPath, truncatedFrame);
 
         disp('Subtracting background..')
-        [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList);
+        [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList, InstrumentSetting);
 
         disp('Finding aggregates..')
         objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg, xName, yName);
@@ -56,7 +58,7 @@ else
     [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName, xName, yName] = readTIFF(folderPath, truncatedFrame);
     
     disp('Subtracting background..')
-    [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList);
+    [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList, InstrumentSetting);
     
     disp('Finding aggregates..')
     objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg, xName, yName);

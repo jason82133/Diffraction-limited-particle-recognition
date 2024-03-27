@@ -1,6 +1,6 @@
 
 % Generating a mask for binarisation.
-function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList)
+function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList, InstrumentSetting)
 
     % Initialize cell array to store processed images
     outputImageList = cell(size(averagedStacksList));
@@ -66,12 +66,36 @@ function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(av
         
         % Adaptive thresholding based on linear regression of image CV.
         % The CV considers the variation of intensity histogram which positively correlates to the number of spots
-        pThreshold = 1.5924*tempCV-0.01847;
-        if pThreshold > 0.3
-            pThreshold = 0.3;
-        end
-        if pThreshold < 0.05
-            pThreshold = 0.05;
+
+        if InstrumentSetting == 1
+            pThreshold = 1.5924*tempCV-0.01847; % Arabidopsis 641nm OD=1.2
+
+            if pThreshold > 0.3
+                pThreshold = 0.3;
+            end
+            if pThreshold < 0.05
+                pThreshold = 0.05;
+            end
+        elseif InstrumentSetting == 2
+            pThreshold = 1.4656*tempCV-0.0341; % Artemisia 641nm
+
+            if pThreshold > 0.3
+                pThreshold = 0.3;
+            end
+            if pThreshold < 0.04
+                pThreshold = 0.04;
+            end
+        elseif InstrumentSetting == 3
+            pThreshold = 19.44*tempCV-0.8586; % Arabidopsis 488nm OD=1.2
+
+            if pThreshold > 0.1
+                pThreshold = 0.1;
+            end
+            if pThreshold < 0.03
+                pThreshold = 0.03;
+            end
+        else
+            disp('No avaialble instrument')
         end
 
         % Filter out pixels with right-sided p-value
