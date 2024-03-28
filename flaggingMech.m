@@ -20,7 +20,7 @@ function flaggedList = flaggingMech(filteredList)
 
         wellPos = find(ismember(firstImagePos, find(ismember(Data_wellName, uniqueWell{wellNum})))); % select the well and the specified well name
         
-        clear data_Background
+        clear data_ImageMean
 
         for j = 1:numel(wellPos)
             data_ImageMean(j) = filteredList(firstImagePos(wellPos(j))).ImageMean;
@@ -40,7 +40,7 @@ function flaggedList = flaggingMech(filteredList)
         % filteredIndices_ImageMean = find(data_ImageMean > thresholdHigh | data_ImageMean < thresholdLow);
 
         % Identify outliers as elements more than three scaled MAD from the median
-        outlierList_ImageMean = find(isoutlier(data_Background));
+        outlierList_ImageMean = find(isoutlier(data_ImageMean));
         outlierPosList_ImageMean = wellPos(outlierList_ImageMean);
         
         if ~isempty(outlierPosList_ImageMean) == 1
