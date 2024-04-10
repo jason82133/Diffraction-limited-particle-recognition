@@ -1,4 +1,4 @@
-function objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma)
+function objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg, xName, yName)
     % Process a series of images, identify objects, and calculate object properties
 
     numImages = numel(outputImageList);
@@ -33,20 +33,23 @@ function objects = identifyObjects(outputImageList, folderName, imageName, wellN
             
             % Calculate number of pixels of an object
             NumPixels = numel(row);
-            
+           
             % Store object data
             objectData{j}.folderName = folderName;
             objectData{j}.imageName = imageName{i};
             objectData{j}.wellName = wellName{i};
+            objectData{j}.xName = xName{i};
+            objectData{j}.yName = yName{i};
             objectData{j}.PixelPositions = [row, col];
             objectData{j}.CentroidPositions = stats(j).Centroid;
             objectData{j}.NumPixels = NumPixels;
             objectData{j}.SumIntensity = sumIntensity;
             objectData{j}.avgPixelIntensity = sumIntensity/NumPixels;
-            objectData{j}.SBdiff = sumIntensity - NumPixels*mu(i);
+            objectData{j}.SBdiff = sumIntensity - NumPixels*bg(i);
             objectData{j}.Eccentricity = stats(j).Eccentricity;
-            objectData{j}.MeanOfBackground = mu(i);
-            objectData{j}.StDOfBackground = sigma(i);
+            objectData{j}.Background = bg(i);
+            objectData{j}.MeanOfImage = mu(i);
+            objectData{j}.StDOfImage = sigma(i);
         end
 
         % Store object data for the current image

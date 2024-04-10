@@ -1,22 +1,22 @@
-function [filteredList, filteredPosList, areaThreshold] = filterData(originalStruct, posList)
+function [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList)
     % Filter rows in a structure based on criteria
 
     % Initialize the filtered structure
-    filteredList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'BackgroundMean', {}, 'BackgroundStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {});
+    filteredList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'Background', {}, 'ImageMean', {}, 'ImageStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {}, 'X', {}, 'Y', {});
     filteredPosList = struct('objectIndex', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
 
     % Iterate through each entry in the original structure
-    for i = 1:numel(originalStruct)
+    for i = 1:numel(objectList)
         % Extract relevant fields
         %eccentricity = originalStruct(i).Eccentricity;
-        numOfPixels = originalStruct(i).NumOfPixels;
+        numOfPixels = objectList(i).NumOfPixels;
 
         % Check the criteria
-        areaThreshold = [2, 200];
+        areaThreshold = [2, 300];
 
         if numOfPixels > areaThreshold(1) && numOfPixels < areaThreshold(2)
             % Add the entry to the filtered structurec
-            filteredList(end + 1) = originalStruct(i);
+            filteredList(end + 1) = objectList(i);
             filteredPosList(end + 1) = posList(i);
         end
     end

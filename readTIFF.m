@@ -1,4 +1,4 @@
-function [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName] = readTIFF(folderPath, truncatedFrame)
+function [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName, xName, yName] = readTIFF(folderPath, truncatedFrame)
 
     % Get a list of all TIFF files in the folder
     tifFiles = dir(fullfile(folderPath, '*.tif'));
@@ -18,6 +18,8 @@ function [averagedStacksList, averagedFileNamesList, folderName, imageName, well
 
         matchedWell = regexp(tifFiles(k).name, pattern, 'tokens', 'once');
         wellName{k} = ['X' matchedWell{1} 'Y' matchedWell{2}];
+        xName{k} = matchedWell{1};
+        yName{k} = matchedWell{2};
     end
     
     % Initialize a cell array to store the image stack and corresponding file names

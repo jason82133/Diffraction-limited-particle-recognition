@@ -1,20 +1,26 @@
+
+% Main_fileReorganisation
+% Version 1.11
+%
 % Copyright (c) 2023, by Jason C Sang.
+
+
 
 %% Setting
 clear all
 
 % Specify the folder path to search for Excel files which belong to one single slide
 folder_1 = '';
-folder_2 = 'Analysis 2024-01-22_17-25-03'; % Folder to replace the X-Y coordinates
-savePath = 'D:\Arabidopsis\20240122_Simpull_Syn_tween20 time course';
+folder_2 = 'Analysis 2024-03-25_19-09-44'; % Folder to replace the X-Y coordinates
+savePath = 'D:\Work\Arabidopsis\20240325_Simpull_abeta_antibody screening_641';
 
 % Add a column of the slide label
-slide_Name = '20240122-J';
+slide_Name = '20240311-E_641_2';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
-oldValues = {'Y2', 'Y1', 'Y0'};
-newValues = {'Y3', 'Y2', 'Y1'};
+oldValues = {'X5','X4','X3','X2','X1','X0','Y1','Y0'};
+newValues = {'X9','X8','X7','X6','X5','X4','Y3','Y2'};
 
 
 %%
@@ -42,21 +48,41 @@ if ~isempty(folder_1)
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
         wellName_data = cellstr(table_2.wellName);
+        x_data = cellstr(table_2.X);
+        y_data = cellstr(table_2.Y);
         
         % Loop through each old value and perform replacement
         for i = 1:numel(oldValues)
             % Find indices of rows containing the old value
             imageNameIndices = contains(imageName_data, oldValues{i});
             wellNameIndices = contains(wellName_data, oldValues{i});
+            if contains(oldValues{i}, 'X')
+                xIndices = contains(x_data, erase(oldValues{i},'X'));
+            else
+                xIndices = [];
+            end
+            if contains(oldValues{i}, 'Y')
+                yIndices = contains(y_data, erase(oldValues{i},'Y'));
+            else
+                yIndices = [];
+            end
         
             % Replace the old value with the new value
             imageName_data(imageNameIndices) = strrep(imageName_data(imageNameIndices), oldValues{i}, newValues{i});
             wellName_data(imageNameIndices) = strrep(wellName_data(wellNameIndices), oldValues{i}, newValues{i});
+            if ~isempty(xIndices)
+                x_data(imageNameIndices) = strrep(x_data(xIndices), erase(oldValues{i},'X'), erase(newValues{i},'X'));
+            end
+            if ~isempty(yIndices)
+                y_data(imageNameIndices) = strrep(y_data(yIndices), erase(oldValues{i},'Y'), erase(newValues{i},'Y'));
+            end
         end
         
          % Update the table with the modified column
         table_2.imageName = imageName_data;
         table_2.wellName = wellName_data;
+        table_2.X = x_data;
+        table_2.Y = y_data;
     end
     
     % Join two tables
@@ -77,21 +103,41 @@ else
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
         wellName_data = cellstr(table_2.wellName);
+        x_data = cellstr(table_2.X);
+        y_data = cellstr(table_2.Y);
         
         % Loop through each old value and perform replacement
         for i = 1:numel(oldValues)
             % Find indices of rows containing the old value
             imageNameIndices = contains(imageName_data, oldValues{i});
             wellNameIndices = contains(wellName_data, oldValues{i});
+            if contains(oldValues{i}, 'X')
+                xIndices = contains(x_data, erase(oldValues{i},'X'));
+            else
+                xIndices = [];
+            end
+            if contains(oldValues{i}, 'Y')
+                yIndices = contains(y_data, erase(oldValues{i},'Y'));
+            else
+                yIndices = [];
+            end
         
             % Replace the old value with the new value
             imageName_data(imageNameIndices) = strrep(imageName_data(imageNameIndices), oldValues{i}, newValues{i});
             wellName_data(imageNameIndices) = strrep(wellName_data(wellNameIndices), oldValues{i}, newValues{i});
+            if ~isempty(xIndices)
+                x_data(imageNameIndices) = strrep(x_data(xIndices), erase(oldValues{i},'X'), erase(newValues{i},'X'));
+            end
+            if ~isempty(yIndices)
+                y_data(imageNameIndices) = strrep(y_data(yIndices), erase(oldValues{i},'Y'), erase(newValues{i},'Y'));
+            end
         end
         
          % Update the table with the modified column
         table_2.imageName = imageName_data;
         table_2.wellName = wellName_data;
+        table_2.X = x_data;
+        table_2.Y = y_data;
     end
     
     % Join two tables
@@ -107,52 +153,33 @@ slideName = repmat({slide_Name}, size(outputTable,1), 1);
 outputTable = addvars(outputTable, slideName, 'Before', 1);
 
 
-%%
-% global selectedWell;
-% selectedWell = [];
+
+
+%% Click and select
+
+%global selectedWell;
+%selectedWell = selectSlide;
+
+
+% excelPath = 'C:\Users\jason\OneDrive\Desktop\Experimental plans\20240307 Assay experimental plan.xlsx';
 % 
-% % Create a figure
-% f = figure('Name', 'Selectable Grid', 'Position', [100, 100, 500, 240]);
+% % Read data from Excel
+% excelTable = readtable(excelPath);
 % 
-% % Create a grid with x and y positions
-% x = 0:9;
-% y = 0:3;
+% % Extract x, y, and color data from the table
+% xData = excelTable.X;
+% yData = excelTable.Y;
+% colors = excelTable.Color;
 % 
-% % Set the callback function for button clicks
-% buttonCallback = @(src, event) buttonClicked(src, event, x, y);
+% % Create a scatter plot with colored points
+% scatter(xData, yData, 50, colors, 'filled');
+% colormap('jet'); % You can use a different colormap if needed
 % 
-% % Create buttons for each position in the grid
-% for i = 1:numel(x)
-%     for j = 1:numel(y)
-%         % Calculate button position
-%         xPos = x(i);
-%         yPos = y(j);
-% 
-%         % Create button
-%         %uipanel(f,'Position',[0.1 0.1 0.35 0.65]);
-%         pushbutton = uicontrol('Style', 'pushbutton', 'String', '' , 'Position', [380-xPos*40, 140-yPos*40, 40, 40], ...
-%             'Callback', buttonCallback, 'UserData', [xPos, yPos], 'BackgroundColor', [1, 1, 1]);
-% 
-%     end
-% end
-% 
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.76,0.75,0.075,0.075], 'String', '0', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.68,0.75,0.075,0.075], 'String', '1', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.60,0.75,0.075,0.075], 'String', '2', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.52,0.75,0.075,0.075], 'String', '3', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.44,0.75,0.075,0.075], 'String', '4', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.36,0.75,0.075,0.075], 'String', '5', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.28,0.75,0.075,0.075], 'String', '6', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.20,0.75,0.075,0.075], 'String', '7', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.12,0.75,0.075,0.075], 'String', '8', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.04,0.75,0.075,0.075], 'String', '9', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.84,0.62,0.075,0.075], 'String', '0', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.84,0.45,0.075,0.075], 'String', '1', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.84,0.28,0.075,0.075], 'String', '2', 'FontSize', 10);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.84,0.12,0.075,0.075], 'String', '3', 'FontSize', 10);
-% 
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.40,0.88,0.075,0.075], 'String', 'X', 'FontSize', 12.5);
-% uicontrol('style', 'text', 'unit', 'normalized', 'position', [0.90,0.36,0.075,0.075], 'String', 'Y', 'FontSize', 12.5);
+% % Add labels and title
+% xlabel('X Position');
+% ylabel('Y Position');
+% title('Scatter Plot with Colored Points');
+
 
 
 %%
