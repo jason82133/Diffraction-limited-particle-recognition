@@ -33,7 +33,7 @@ end
 
 if ~isempty(subfolderNames)
 
-    for i = 2%:numel(subfolderNames)
+    for i = 1:numel(subfolderNames)
         folderPath = [path '\' subfolderNames{i}];
 
         disp(['Loading images from ' num2str(subfolderNames{i}) '..'])
