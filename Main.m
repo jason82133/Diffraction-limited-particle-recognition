@@ -1,6 +1,6 @@
 
 % Diffraction-limited particle recognition (DLPR)
-% Version 1.13
+% Version 1.14
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -8,9 +8,9 @@
 
 %% Setting
 
-path = 'C:\Users\jason\OneDrive\Desktop\test\test'; % Direct to the main folder to be analysed
+path = 'G:\Work\Artemisia\20240408_Simpull_Syn_abeta_serum sample handling'; % Direct to the main folder to be analysed
 
-InstrumentSetting = 1; % Arabidopsis 641nm = 1, Artemisia 641 nm = 2, Arabidopsis 488nm = 3
+InstrumentSetting = 2; % Arabidopsis 641nm = 1, Artemisia 641 nm = 2, Arabidopsis 488nm = 3
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
@@ -33,7 +33,7 @@ end
 
 if ~isempty(subfolderNames)
 
-    for i = 1:numel(subfolderNames)
+    for i = 2%:numel(subfolderNames)
         folderPath = [path '\' subfolderNames{i}];
 
         disp(['Loading images from ' num2str(subfolderNames{i}) '..'])
@@ -45,6 +45,7 @@ if ~isempty(subfolderNames)
         disp('Finding aggregates..')
         objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg, xName, yName);
         [objectList, posList] = organizeObjectData(objects);
+        disp('Filtering..')
         [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
 
         disp('Saving data..')

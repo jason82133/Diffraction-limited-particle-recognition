@@ -1,10 +1,10 @@
 function flaggedList = flaggingMech(filteredList)
 
-    Data_wellName = {filteredList.wellName};
-    Data_imageName = {filteredList.imageName};
+    Data_wellName = [filteredList.wellName];
+    Data_imageName = [filteredList.imageName];
 
     % Use unique to get unique elements and their counts
-    uniqueWell = unique(Data_wellName);
+    uniqueWell = unique([filteredList.wellName]);
     [uniqueImage, firstImagePos, ~] = unique(Data_imageName);
     
     flaggedList = cell(size(Data_imageName,2), 1);
@@ -20,7 +20,7 @@ function flaggedList = flaggingMech(filteredList)
 
         wellPos = find(ismember(firstImagePos, find(ismember(Data_wellName, uniqueWell{wellNum})))); % select the well and the specified well name
         
-        clear data_ImageMean
+        data_ImageMean = zeros(numel(wellPos), 1);
 
         for j = 1:numel(wellPos)
             data_ImageMean(j) = filteredList(firstImagePos(wellPos(j))).ImageMean;
@@ -40,7 +40,7 @@ function flaggedList = flaggingMech(filteredList)
         % filteredIndices_ImageMean = find(data_ImageMean > thresholdHigh | data_ImageMean < thresholdLow);
 
         % Identify outliers as elements more than three scaled MAD from the median
-        outlierList_ImageMean = find(isoutlier(data_ImageMean));
+        outlierList_ImageMean = isoutlier(data_ImageMean);
         outlierPosList_ImageMean = wellPos(outlierList_ImageMean);
         
         if ~isempty(outlierPosList_ImageMean) == 1

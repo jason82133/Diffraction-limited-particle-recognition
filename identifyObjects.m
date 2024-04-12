@@ -4,7 +4,7 @@ function objects = identifyObjects(outputImageList, folderName, imageName, wellN
     numImages = numel(outputImageList);
     objects = cell(1, numImages);
 
-    for i = 1:numImages
+    parfor i = 1:numImages
         currentImage = outputImageList{i};
 
         % Identify connected components (objects) in the binary image

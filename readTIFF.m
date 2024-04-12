@@ -1,5 +1,5 @@
 function [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName, xName, yName] = readTIFF(folderPath, truncatedFrame)
-
+    
     % Get a list of all TIFF files in the folder
     tifFiles = dir(fullfile(folderPath, '*.tif'));
     imageName = cell(size(tifFiles));
@@ -12,7 +12,7 @@ function [averagedStacksList, averagedFileNamesList, folderName, imageName, well
 
     % Get the image name
     % Use the pattern to get the well number part
-    for k = 1:numel(tifFiles)
+    parfor k = 1:numel(tifFiles)
         parts = strsplit(tifFiles(k).name, '_');
         imageName{k} = parts{1};
 
@@ -43,8 +43,9 @@ function [averagedStacksList, averagedFileNamesList, folderName, imageName, well
             frameLoaded = truncatedFrame;
         end
 
-        % Read the TIFF image
-        for j = 1:frameLoaded
+
+        % Read the TIFF image      
+        parfor j = 1:frameLoaded
             currentImage(:,:,j) = imread(filePath, j);
         end
         
@@ -54,7 +55,8 @@ function [averagedStacksList, averagedFileNamesList, folderName, imageName, well
     
         averagedStacksList{i} = averagedStacks;
         averagedFileNamesList{i} = averagedFileNames;
-    
+
+        disp(['Loading ' num2str(round(i/numel(tifFiles)*100, 1)) ' %'])
     end
 
 end

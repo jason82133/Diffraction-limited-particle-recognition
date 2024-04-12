@@ -9,6 +9,10 @@ function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(av
     smoothSize = 3;
 
     % Loop through each z-averaged image
+    bg = zeros(size(averagedStacksList,2));
+    mu = zeros(size(averagedStacksList,2));
+    sigma = zeros(size(averagedStacksList,2));
+
     for i = 1:numel(averagedStacksList)
         
         % Get the current z-averaged image

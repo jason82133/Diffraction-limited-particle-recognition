@@ -7,9 +7,7 @@ function [averagedStacks, averagedFileNames] = stackAverage(imageStacks, fileNam
     stackArray = cat(3, imageStacks(:,:,:));
 
     % Compute the average of the image stack along the fourth dimension (frames)
-    averagedImage = mean(stackArray, 3);
-
-    % Store the averaged image and update the file name
-    averagedStacks = averagedImage;
+    averagedStacks = mean(stackArray, 3);
+    
     averagedFileNames = ['avg_' fileNames];
 end

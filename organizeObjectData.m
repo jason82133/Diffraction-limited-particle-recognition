@@ -20,8 +20,20 @@ function [objectList, posList] = organizeObjectData(objects)
         %folderList{i} = objectData{i}.folderName;
         %imageList{i} = objectData{i}.imageName;
 
+        objectN = numel(objectData);
+
+        tempPosListN = zeros(objectN,4);
+        imagePosListN = cell(objectN,1);
+        tempListN = zeros(objectN,10);
+        folderListN = cell(objectN,1);
+        imageListN = cell(objectN,1);
+        wellListN = cell(objectN,1);
+        xListN = cell(objectN,1);
+        yListN = cell(objectN,1);
+        
         % Loop through each object in the current image
-        for j = 1:numel(objectData)
+        for j = 1:objectN
+
             % Extract properties for the current object
             sumIntensity = objectData{j}.SumIntensity;
             avgPixelIntensity = objectData{j}.avgPixelIntensity;
@@ -43,26 +55,65 @@ function [objectList, posList] = organizeObjectData(objects)
             %     tempPosList = [tempPosList; j, posX, posY, CentroidPositionsX, CentroidPositionsY, i];
             %     imagePosList = [imagePosList; {objectData{j}.imageName}];
             % end
-            tempPosList = [tempPosList; j, CentroidPositionsX, CentroidPositionsY, i];
-            imagePosList = [imagePosList; {objectData{j}.imageName}];
 
-            % Append the properties in an image to the temp list
-            tempList = [tempList; j, sumIntensity, avgPixelIntensity, SB_diff, numPixels, Eccentricity, Background, ImageMean, ImageStd, i];
-            folderList = [folderList; {objectData{j}.folderName}];
-            imageList = [imageList; {objectData{j}.imageName}];
-            wellList = [wellList; {objectData{j}.wellName}];
-            xList = [xList; {objectData{j}.xName}];
-            yList = [yList; {objectData{j}.yName}];
+            tempPosListN(j,1) = j;
+            tempPosListN(j,2) = CentroidPositionsX;
+            tempPosListN(j,3) = CentroidPositionsY;
+            tempPosListN(j,4) = i;
+
+            imagePosListN{j} = {objectData{j}.imageName};
+
+            tempListN(j, 1) = j;
+            tempListN(j, 2) = sumIntensity;
+            tempListN(j, 3) = avgPixelIntensity;
+            tempListN(j, 4) = SB_diff;
+            tempListN(j, 5) = numPixels;
+            tempListN(j, 6) = Eccentricity;
+            tempListN(j, 7) = Background;
+            tempListN(j, 8) = ImageMean;
+            tempListN(j, 9) = ImageStd;
+            tempListN(j, 10) = i;
+
+            folderListN{j} = {objectData{j}.folderName};
+            imageListN{j} = {objectData{j}.imageName};
+            wellListN{j} = {objectData{j}.wellName};
+            xListN{j} = {objectData{j}.xName};
+            yListN{j} = {objectData{j}.yName};
+
+            % tempPosList = [tempPosList; j, CentroidPositionsX, CentroidPositionsY, i];
+            % imagePosList = [imagePosList; {objectData{j}.imageName}];
+            % 
+            % % Append the properties in an image to the temp list
+            % tempList = [tempList; j, sumIntensity, avgPixelIntensity, SB_diff, numPixels, Eccentricity, Background, ImageMean, ImageStd, i];
+            % folderList = [folderList; {objectData{j}.folderName}];
+            % imageList = [imageList; {objectData{j}.imageName}];
+            % wellList = [wellList; {objectData{j}.wellName}];
+            % xList = [xList; {objectData{j}.xName}];
+            % yList = [yList; {objectData{j}.yName}];
         end
-        clear objectData
 
-        disp([num2str(round(i/numImages*100, 1)) ' %'])
+        % Append the properties in an image to the temp list
+        tempPosList = [tempPosList; tempPosListN];
+        imagePosList = [imagePosList; imagePosListN];
+        tempList = [tempList; tempListN];
+        folderList = [folderList; folderListN];
+        imageList = [imageList; imageListN];
+        wellList = [wellList; wellListN];
+        xList = [xList; xListN];
+        yList = [yList; yListN];
+
+        clear objectData
+ 
+        disp(['Finding ' num2str(round(i/numImages*100, 1)) ' %'])
     end
+
+
 
     % Append the properties to the organized list
     
     objectList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'Background', {}, 'ImageMean', {}, 'ImageStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {}, 'X', {}, 'Y', {});
     objectList = repmat(objectList, length(tempList), 1);
+
     for num = 1:length(tempList)
        objectList(num).objectIndex = tempList(num,1);
        objectList(num).Intensity = tempList(num,2);

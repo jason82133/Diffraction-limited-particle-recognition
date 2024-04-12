@@ -7,20 +7,20 @@
 
 
 %% Setting
-clear all
+clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
 folder_1 = '';
-folder_2 = 'Analysis 2024-03-25_19-09-44'; % Folder to replace the X-Y coordinates
-savePath = 'D:\Work\Arabidopsis\20240325_Simpull_abeta_antibody screening_641';
+folder_2 = 'Analysis 2024-04-10_14-01-51'; % Folder to replace the X-Y coordinates
+savePath = 'G:\Work\Artemisia\20240408_Simpull_Syn_abeta_serum sample handling';
 
 % Add a column of the slide label
-slide_Name = '20240311-E_641_2';
+slide_Name = '20240408_sc-211_3';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
-oldValues = {'X5','X4','X3','X2','X1','X0','Y1','Y0'};
-newValues = {'X9','X8','X7','X6','X5','X4','Y3','Y2'};
+oldValues = {'X0'};
+newValues = {'X9'};
 
 
 %%
@@ -43,7 +43,7 @@ if ~isempty(folder_1)
     table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
     table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
     
-    
+    disp('Converting..')
     if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
@@ -98,7 +98,7 @@ else
     % Load the files
     table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
     
-    
+    disp('Converting..')
     if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
