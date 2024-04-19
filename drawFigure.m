@@ -1,4 +1,4 @@
-%function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
+function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
     
     warning('off','MATLAB:MKDIR:DirectoryExists')
     figPath = [dataPath '\Figures'];
@@ -6,7 +6,11 @@
     
     uniqueImageNum = unique([filteredPosList.imageNum]);
 
-    for imageNum = 1:numel(averagedStacksList)
+    imageList = [filteredPosList.imageNum];
+
+    lengthList = numel(averagedStacksList);
+
+    for imageNum = 1:lengthList
         %clear currentImage
 
         % Display the original and processed images for comparison
@@ -16,7 +20,7 @@
                 
         aggregateListOftheImage = struct('objectIndex', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
         
-        ind = [filteredPosList.imageNum] == uniqueImageNum(imageNum);
+        ind = imageList == uniqueImageNum(imageNum);
         aggregateListOftheImage = filteredPosList(ind);
         
         if isempty(aggregateListOftheImage) == 1
@@ -52,7 +56,7 @@
 
         saveas(gcf, [figPath '\' char(aggregateListOftheImage(1).imageName) '.png']);
 
-        disp(['Saving figures ' num2str(round((imageNum/numel(averagedStacksList)*100), 1)) ' %'])
+        disp(['Saving figures ' num2str(round((imageNum/lengthList*100), 1)) ' %'])
     end
     close all
-%end
+end

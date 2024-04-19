@@ -1,6 +1,6 @@
 
 % Diffraction-limited particle recognition (DLPR)
-% Version 1.14
+% Version 1.14.1
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -8,7 +8,7 @@
 
 %% Setting
 
-path = 'G:\Work\Artemisia\20240408_Simpull_Syn_abeta_serum sample handling'; % Direct to the main folder to be analysed
+path = 'G:\Work\Artemisia\20240412_Simpull_Syn_abeta_serum sample storage'; % Direct to the main folder to be analysed
 
 InstrumentSetting = 2; % Arabidopsis 641nm = 1, Artemisia 641 nm = 2, Arabidopsis 488nm = 3
 

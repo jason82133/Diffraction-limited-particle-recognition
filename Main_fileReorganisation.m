@@ -1,6 +1,6 @@
 
 % Main_fileReorganisation
-% Version 1.11
+% Version 1.12
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -11,16 +11,16 @@ clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
 folder_1 = '';
-folder_2 = 'Analysis 2024-04-10_14-01-51'; % Folder to replace the X-Y coordinates
-savePath = 'G:\Work\Artemisia\20240408_Simpull_Syn_abeta_serum sample handling';
+folder_2 = 'Analysis 2024-04-19_13-50-06'; % Folder to replace the X-Y coordinates
+savePath = 'G:\Work\Artemisia\20240412_Simpull_Syn_abeta_serum sample storage';
 
 % Add a column of the slide label
-slide_Name = '20240408_sc-211_3';
+slide_Name = '20240412_6E10';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
 oldValues = {'X0'};
-newValues = {'X9'};
+newValues = {'X0'};
 
 
 %%
@@ -40,10 +40,11 @@ if ~isempty(folder_1)
     allFiles(2) = bb(1);
     
     % Load the files
+    disp('Loading..(1/3)')
     table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
     table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
     
-    disp('Converting..')
+    disp('Converting..(2/3)')
     if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
@@ -93,12 +94,31 @@ else
     
     bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
     
-    allFiles(2) = bb(1);
+    numberTable = numel(bb);
+
+    if numberTable == 1
+        allFiles(1) = bb(1);
+    else
+        for j = 1:numberTable
+           allFiles(j) = bb(j);
+        end
+    end
     
     % Load the files
-    table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
-    
-    disp('Converting..')
+    disp('Loading..(1/3)')
+
+    if numberTable == 1
+        table_2 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
+    else
+        table_2 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
+        for j = 2:numberTable
+            clear tableTemp
+            tableTemp = readtable([allFiles(j).folder, '\', allFiles(j).name]);
+            table_2 = [table_2; tableTemp];
+        end
+    end
+
+    disp('Converting..(2/3)')
     if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
@@ -184,6 +204,18 @@ outputTable = addvars(outputTable, slideName, 'Before', 1);
 
 %%
 % Write the table to an Excel file
-writetable(outputTable, [savePath '\Output_' slide_Name '.xlsx']);
+sizeTable = size(outputTable,1);
 
-disp('Data saved');
+if sizeTable < 2^20
+    writetable(outputTable, [savePath '\Output_' slide_Name '.xlsx']);
+else
+    if rem(sizeTable,2) == 1
+        writetable(outputTable(1:(sizeTable-1)/2, :), [savePath '\Output_' slide_Name '_1.xlsx']);
+        writetable(outputTable(((sizeTable-1)/2+1):sizeTable, :), [savePath '\Output_' slide_Name '_2.xlsx']);
+    else
+        writetable(outputTable(1:sizeTable/2, :), [savePath '\Output_' slide_Name '_1.xlsx']);
+        writetable(outputTable((sizeTable/2+1):sizeTable, :), [savePath '\Output_' slide_Name '_2.xlsx']);
+    end
+end
+
+disp('Data saved (3/3)');
