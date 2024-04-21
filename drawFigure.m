@@ -9,7 +9,7 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
     imageList = [filteredPosList.imageNum];
 
     lengthList = numel(averagedStacksList);
-
+    
     for imageNum = 1:lengthList
         %clear currentImage
 
@@ -26,7 +26,7 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
         if isempty(aggregateListOftheImage) == 1
             aggregateListOftheImage(1).imageName = imageName{imageNum};
         end
-
+        
         f = figure('Name', char(aggregateListOftheImage(1).imageName), 'visible', 'off');
         f.Position(3:4) = [1300 500];
         
@@ -40,7 +40,7 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
         subplot(1, 2, 2);
         imagesc(aggregateImage);
         title('Identified aggregates');
-        for j = 1:length(aggregateListOftheImage)
+        parfor j = 1:length(aggregateListOftheImage)
             % text((aggregateListOftheImage(j).CentroidPosX)+1, (aggregateListOftheImage(j).CentroidPosY)+7,['\color{red} ' num2str(aggregateListOftheImage(j).objectIndex)], 'FontSize', 4);
             x = round(aggregateListOftheImage(j).CentroidPosX);
             y = round(aggregateListOftheImage(j).CentroidPosY);
@@ -53,9 +53,8 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
         colorbar;
 
         hold on
-
         saveas(gcf, [figPath '\' char(aggregateListOftheImage(1).imageName) '.png']);
-
+        
         disp(['Saving figures ' num2str(round((imageNum/lengthList*100), 1)) ' %'])
     end
     close all

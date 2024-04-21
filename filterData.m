@@ -1,4 +1,7 @@
 function [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList)
+
+    disp('Filtering..')
+
     % Filter rows in a structure based on criteria
     areaThreshold = [2, 300];
 

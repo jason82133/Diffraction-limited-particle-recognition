@@ -2,6 +2,8 @@
 % Generating a mask for binarisation.
 function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(averagedStacksList, InstrumentSetting)
 
+    disp('Subtracting background..')
+    
     % Initialize cell array to store processed images
     outputImageList = cell(size(averagedStacksList));
 

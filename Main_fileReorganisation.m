@@ -1,6 +1,6 @@
 
 % Main_fileReorganisation
-% Version 1.12
+% Version 1.12.1
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -26,15 +26,15 @@ newValues = {'X0'};
 %%
 
 % Define the file filter for Excel files
-fileFilter = {'*Output_*.xlsx', '*Output_*.xls'};
+fileFilter = '*Output_*.csv';
 
 if ~isempty(folder_1)
     % Get a list of all files in the specified path and its subfolders
     folderPath_1 = [savePath, '\', folder_1];
     folderPath_2 = [savePath, '\', folder_2];
     
-    aa = dir(fullfile(folderPath_1, '**', fileFilter{1}));
-    bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
+    aa = dir(fullfile(folderPath_1, '**', fileFilter));
+    bb = dir(fullfile(folderPath_2, '**', fileFilter));
     
     allFiles(1) = aa(1);
     allFiles(2) = bb(1);
@@ -207,14 +207,14 @@ outputTable = addvars(outputTable, slideName, 'Before', 1);
 sizeTable = size(outputTable,1);
 
 if sizeTable < 2^20
-    writetable(outputTable, [savePath '\Output_' slide_Name '.xlsx']);
+    writetable(outputTable, [savePath '\Output_' slide_Name '.csv']);
 else
     if rem(sizeTable,2) == 1
-        writetable(outputTable(1:(sizeTable-1)/2, :), [savePath '\Output_' slide_Name '_1.xlsx']);
-        writetable(outputTable(((sizeTable-1)/2+1):sizeTable, :), [savePath '\Output_' slide_Name '_2.xlsx']);
+        writetable(outputTable(1:(sizeTable-1)/2, :), [savePath '\Output_' slide_Name '_1.csv']);
+        writetable(outputTable(((sizeTable-1)/2+1):sizeTable, :), [savePath '\Output_' slide_Name '_2.csv']);
     else
-        writetable(outputTable(1:sizeTable/2, :), [savePath '\Output_' slide_Name '_1.xlsx']);
-        writetable(outputTable((sizeTable/2+1):sizeTable, :), [savePath '\Output_' slide_Name '_2.xlsx']);
+        writetable(outputTable(1:sizeTable/2, :), [savePath '\Output_' slide_Name '_1.csv']);
+        writetable(outputTable((sizeTable/2+1):sizeTable, :), [savePath '\Output_' slide_Name '_2.csv']);
     end
 end
 

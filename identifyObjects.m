@@ -1,6 +1,8 @@
 function objects = identifyObjects(outputImageList, folderName, imageName, wellName, mu, sigma, bg, xName, yName)
-    % Process a series of images, identify objects, and calculate object properties
 
+    disp('Finding aggregates..')
+
+    % Process a series of images, identify objects, and calculate object properties
     numImages = numel(outputImageList);
     objects = cell(1, numImages);
 

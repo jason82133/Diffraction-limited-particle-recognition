@@ -1,17 +1,36 @@
 function [objectList, posList] = organizeObjectData(objects)
+    
     % Reorganize the processedObjects data into a new list
-
     numImages = numel(objects);
 
     % Initialize the organized list
-    tempPosList = [];
-    imagePosList = [];
-    tempList = [];
-    folderList = [];
-    imageList = [];
-    wellList = [];
-    xList = [];
-    yList = [];
+    numTotal = 0;
+
+    for k = 1:numImages
+        numObject(k) = numel(objects{k});
+        numTotal =  numTotal + numObject(k);
+    end
+  
+    tempPosList = zeros(numTotal,4);
+    imagePosList = cell(numTotal,1);
+    tempList = zeros(numTotal,10);
+    folderList = cell(numTotal,1);
+    imageList = cell(numTotal,1);
+    wellList = cell(numTotal,1);
+    xList = cell(numTotal,1);
+    yList = cell(numTotal,1);
+
+    % Assign positions in the organized lists
+    indObject{1} = [1 numObject(1)];
+    countTwo = numObject(1);
+
+    for k = 2:numImages
+        countOne = countTwo + 1;
+        countTwo = countTwo + numObject(k);
+        indObject{k} = [countOne countTwo];
+    end
+
+
 
     % Loop through each image
     for i = 1:numImages
@@ -92,17 +111,26 @@ function [objectList, posList] = organizeObjectData(objects)
             % yList = [yList; {objectData{j}.yName}];
         end
 
-        % Append the properties in an image to the temp list
-        tempPosList = [tempPosList; tempPosListN];
-        imagePosList = [imagePosList; imagePosListN];
-        tempList = [tempList; tempListN];
-        folderList = [folderList; folderListN];
-        imageList = [imageList; imageListN];
-        wellList = [wellList; wellListN];
-        xList = [xList; xListN];
-        yList = [yList; yListN];
+        % Add the properties in an image to the temp list
+        tempPosList(indObject{i}(1):indObject{i}(2), :) = tempPosListN;
+        imagePosList(indObject{i}(1):indObject{i}(2), :) = imagePosListN;
+        tempList(indObject{i}(1):indObject{i}(2), :) = tempListN;
+        folderList(indObject{i}(1):indObject{i}(2), :) = folderListN;
+        imageList(indObject{i}(1):indObject{i}(2), :) = imageListN;
+        wellList(indObject{i}(1):indObject{i}(2), :) = wellListN;
+        xList(indObject{i}(1):indObject{i}(2), :) = xListN;
+        yList(indObject{i}(1):indObject{i}(2), :) = yListN;
 
-        clear objectData
+        % tempPosList = [tempPosList; tempPosListN];
+        % imagePosList = [imagePosList; imagePosListN];
+        % tempList = [tempList; tempListN];
+        % folderList = [folderList; folderListN];
+        % imageList = [imageList; imageListN];
+        % wellList = [wellList; wellListN];
+        % xList = [xList; xListN];
+        % yList = [yList; yListN];
+
+        clear objectData tempPosListN imagePosListN tempListN folderListN imageListN wellListN xListN yListN
  
         disp(['Finding ' num2str(round(i/numImages*100, 1)) ' %'])
     end

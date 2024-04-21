@@ -1,5 +1,5 @@
 function [averagedStacksList, averagedFileNamesList, folderName, imageName, wellName, xName, yName] = readTIFF(folderPath, truncatedFrame)
-    
+
     % Get a list of all TIFF files in the folder
     tifFiles = dir(fullfile(folderPath, '*.tif'));
     imageName = cell(size(tifFiles));
