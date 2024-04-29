@@ -1,6 +1,6 @@
 
 % Diffraction-limited particle recognition (DLPR)
-% Version 1.14.3
+% Version 1.14.4
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -34,7 +34,7 @@ end
 
 if ~isempty(subfolderNames)
 
-    for i = 1:numel(subfolderNames)
+    for i = 2%1:numel(subfolderNames)
         folderPath = [path '\' subfolderNames{i}];
 
         disp(['Loading images from ' num2str(subfolderNames{i}) '..'])

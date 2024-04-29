@@ -48,6 +48,7 @@ function objects = identifyObjects(outputImageList, folderName, imageName, wellN
             objectData{j}.SumIntensity = sumIntensity;
             objectData{j}.avgPixelIntensity = sumIntensity/NumPixels;
             objectData{j}.SBdiff = sumIntensity - NumPixels*bg(i);
+            objectData{j}.AvgIntdiff = sumIntensity/NumPixels - bg(i);
             objectData{j}.Eccentricity = stats(j).Eccentricity;
             objectData{j}.Background = bg(i);
             objectData{j}.MeanOfImage = mu(i);
