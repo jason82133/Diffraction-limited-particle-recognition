@@ -11,7 +11,7 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
     lengthList = numel(averagedStacksList);
     
     for imageNum = 1:lengthList
-        %clear currentImage
+        clear currentImage
 
         % Display the original and processed images for comparison
         currentImage = averagedStacksList{imageNum};
@@ -40,7 +40,7 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
         subplot(1, 2, 2);
         imagesc(aggregateImage);
         title('Identified aggregates');
-        parfor j = 1:length(aggregateListOftheImage)
+        for j = 1:length(aggregateListOftheImage)
             % text((aggregateListOftheImage(j).CentroidPosX)+1, (aggregateListOftheImage(j).CentroidPosY)+7,['\color{red} ' num2str(aggregateListOftheImage(j).objectIndex)], 'FontSize', 4);
             x = round(aggregateListOftheImage(j).CentroidPosX);
             y = round(aggregateListOftheImage(j).CentroidPosY);

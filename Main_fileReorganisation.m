@@ -1,6 +1,6 @@
 
 % Main_fileReorganisation
-% Version 1.12.1
+% Version 1.12.2
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -11,11 +11,11 @@ clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
 folder_1 = '';
-folder_2 = 'Analysis 2024-04-19_13-50-06'; % Folder to replace the X-Y coordinates
-savePath = 'G:\Work\Artemisia\20240412_Simpull_Syn_abeta_serum sample storage';
+folder_2 = 'Analysis 2024-04-29_11-42-47'; % Folder to replace the X-Y coordinates
+savePath = 'G:\Work\Artemisia\20240428_Simpull_Syn_abeta_serum sample storage_2';
 
 % Add a column of the slide label
-slide_Name = '20240412_6E10';
+slide_Name = '20240428_6E10';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
@@ -26,15 +26,15 @@ newValues = {'X0'};
 %%
 
 % Define the file filter for Excel files
-fileFilter = '*Output_*.csv';
+fileFilter = {'*Output_*.csv'};
 
 if ~isempty(folder_1)
     % Get a list of all files in the specified path and its subfolders
     folderPath_1 = [savePath, '\', folder_1];
     folderPath_2 = [savePath, '\', folder_2];
     
-    aa = dir(fullfile(folderPath_1, '**', fileFilter));
-    bb = dir(fullfile(folderPath_2, '**', fileFilter));
+    aa = dir(fullfile(folderPath_1, '**', fileFilter{1}));
+    bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
     
     allFiles(1) = aa(1);
     allFiles(2) = bb(1);
@@ -49,8 +49,8 @@ if ~isempty(folder_1)
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
         wellName_data = cellstr(table_2.wellName);
-        x_data = cellstr(table_2.X);
-        y_data = cellstr(table_2.Y);
+        x_data = cellstr(num2str(table_2.X));
+        y_data = cellstr(num2str(table_2.Y));
         
         % Loop through each old value and perform replacement
         for i = 1:numel(oldValues)
@@ -84,6 +84,9 @@ if ~isempty(folder_1)
         table_2.wellName = wellName_data;
         table_2.X = x_data;
         table_2.Y = y_data;
+        
+        table_1.X = cellstr(num2str(table_1.X));
+        table_1.Y = cellstr(num2str(table_1.Y));
     end
     
     % Join two tables
@@ -123,8 +126,8 @@ else
         % Convert the column to a cell array of strings
         imageName_data = cellstr(table_2.imageName);
         wellName_data = cellstr(table_2.wellName);
-        x_data = cellstr(table_2.X);
-        y_data = cellstr(table_2.Y);
+        x_data = cellstr(num2str(table_2.X));
+        y_data = cellstr(num2str(table_2.Y));
         
         % Loop through each old value and perform replacement
         for i = 1:numel(oldValues)
@@ -204,6 +207,8 @@ outputTable = addvars(outputTable, slideName, 'Before', 1);
 
 %%
 % Write the table to an Excel file
+disp('Saving data..(3/3)');
+
 sizeTable = size(outputTable,1);
 
 if sizeTable < 2^20
@@ -218,4 +223,4 @@ else
     end
 end
 
-disp('Data saved (3/3)');
+disp('Completed');
