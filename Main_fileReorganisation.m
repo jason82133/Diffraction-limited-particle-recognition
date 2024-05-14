@@ -1,6 +1,6 @@
 
 % Main_fileReorganisation
-% Version 1.12.2
+% Version 1.12.3
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -11,11 +11,11 @@ clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
 folder_1 = '';
-folder_2 = 'Analysis 2024-04-29_11-42-47'; % Folder to replace the X-Y coordinates
-savePath = 'G:\Work\Artemisia\20240428_Simpull_Syn_abeta_serum sample storage_2';
+folder_2 = 'Analysis 2024-05-14_13-18-45'; % Folder to replace the X-Y coordinates
+savePath = 'G:\Work\Artemisia\20240510_Simpull_Syn_abeta_serum sample storage_3';
 
 % Add a column of the slide label
-slide_Name = '20240428_6E10';
+slide_Name = '20240510_211-2';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
@@ -41,8 +41,8 @@ if ~isempty(folder_1)
     
     % Load the files
     disp('Loading..(1/3)')
-    table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
-    table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name]);
+    table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name], "Delimiter", "comma");
+    table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name], "Delimiter", "comma");
     
     disp('Converting..(2/3)')
     if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
@@ -111,9 +111,9 @@ else
     disp('Loading..(1/3)')
 
     if numberTable == 1
-        table_2 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
+        table_2 = readtable([allFiles(1).folder, '\', allFiles(1).name], "Delimiter", "comma");
     else
-        table_2 = readtable([allFiles(1).folder, '\', allFiles(1).name]);
+        table_2 = readtable([allFiles(1).folder, '\', allFiles(1).name], "Delimiter", "comma");
         for j = 2:numberTable
             clear tableTemp
             tableTemp = readtable([allFiles(j).folder, '\', allFiles(j).name]);
