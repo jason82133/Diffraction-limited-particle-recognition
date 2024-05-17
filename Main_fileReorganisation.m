@@ -1,6 +1,6 @@
 
 % Main_fileReorganisation
-% Version 1.12.3
+% Version 1.12.4
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -10,17 +10,17 @@
 clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
-folder_1 = '';
-folder_2 = 'Analysis 2024-05-14_13-18-45'; % Folder to replace the X-Y coordinates
-savePath = 'G:\Work\Artemisia\20240510_Simpull_Syn_abeta_serum sample storage_3';
+folder_1 = 'Analysis 2024-05-17_15-46-00';
+folder_2 = 'Analysis 2024-05-17_16-21-03'; % Folder to replace the X-Y coordinates
+savePath = 'H:\Artemisia\20240513_Simpull_Syn_abeta_serum sample storage batch 2';
 
 % Add a column of the slide label
-slide_Name = '20240510_211-2';
+slide_Name = '20240513_211';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
-oldValues = {'X0'};
-newValues = {'X0'};
+oldValues = {'X5','X4','X3','X2','X1','X0'};
+newValues = {'X9','X8','X7','X6','X5','X4'};
 
 
 %%
@@ -35,14 +35,49 @@ if ~isempty(folder_1)
     
     aa = dir(fullfile(folderPath_1, '**', fileFilter{1}));
     bb = dir(fullfile(folderPath_2, '**', fileFilter{1}));
-    
-    allFiles(1) = aa(1);
-    allFiles(2) = bb(1);
+
+    numberTable_a = numel(aa);
+    numberTable_b = numel(bb);
+
+    if numberTable_a == 1
+        allFiles_a(1) = aa(1);
+    else
+        for j = 1:numberTable_a
+           allFiles_a(j) = aa(j);
+        end
+    end
+    if numberTable_b == 1
+        allFiles_b(1) = bb(1);
+    else
+        for j = 1:numberTable_b
+           allFiles_b(j) = bb(j);
+        end
+    end
+
     
     % Load the files
     disp('Loading..(1/3)')
-    table_1 = readtable([allFiles(1).folder, '\', allFiles(1).name], "Delimiter", "comma");
-    table_2 = readtable([allFiles(2).folder, '\', allFiles(2).name], "Delimiter", "comma");
+    if numberTable_a == 1
+        table_1 = readtable([allFiles_a(1).folder, '\', allFiles_a(1).name], "Delimiter", "comma");
+    else
+        table_1 = readtable([allFiles_a(1).folder, '\', allFiles_a(1).name], "Delimiter", "comma");
+        for j = 2:numberTable_a
+            clear tableTemp
+            tableTemp_1 = readtable([allFiles_a(j).folder, '\', allFiles_a(j).name]);
+            table_1 = [table_1; tableTemp_1];
+        end
+    end
+
+    if numberTable_b == 1
+        table_2 = readtable([allFiles_b(1).folder, '\', allFiles_b(1).name], "Delimiter", "comma");
+    else
+        table_2 = readtable([allFiles_b(1).folder, '\', allFiles_b(1).name], "Delimiter", "comma");
+        for j = 2:numberTable_b
+            clear tableTemp
+            tableTemp_2 = readtable([allFiles_b(j).folder, '\', allFiles_b(j).name]);
+            table_2 = [table_2; tableTemp_2];
+        end
+    end
     
     disp('Converting..(2/3)')
     if ~isempty(oldValues) == 1 || ~isempty(newValues) == 1
