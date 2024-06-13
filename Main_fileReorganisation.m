@@ -1,6 +1,6 @@
 
 % Main_fileReorganisation
-% Version 1.12.4
+% Version 1.12.5
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -10,17 +10,17 @@
 clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
-folder_1 = 'Analysis 2024-05-17_15-46-00';
-folder_2 = 'Analysis 2024-05-17_16-21-03'; % Folder to replace the X-Y coordinates
-savePath = 'H:\Artemisia\20240513_Simpull_Syn_abeta_serum sample storage batch 2';
+folder_1 = '';
+folder_2 = 'Analysis 2024-06-04_20-15-15'; % Folder to replace the X-Y coordinates
+savePath = 'G:\Work\Artemisia\20240531_Simpull_Syn_Abeta_Tau_serum_plasma_sample storage batch 1';
 
 % Add a column of the slide label
-slide_Name = '20240513_211';
+slide_Name = '20240531_4B12';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
-oldValues = {'X5','X4','X3','X2','X1','X0'};
-newValues = {'X9','X8','X7','X6','X5','X4'};
+oldValues = {'X0'};
+newValues = {'X0'};
 
 
 %%
@@ -210,6 +210,11 @@ outputTable = movevars(outputTable, 'folderName', 'Before', 'wellName');
 slideName = repmat({slide_Name}, size(outputTable,1), 1);
 outputTable = addvars(outputTable, slideName, 'Before', 1);
 
+uniqueID = cell(size(outputTable,1),1);
+for i = 1:size(outputTable,1)
+    uniqueID{i} = [char(outputTable.slideName(i)) '_' char(outputTable.imageName(i))];
+end
+outputTable = addvars(outputTable, uniqueID, 'Before', 1);
 
 
 

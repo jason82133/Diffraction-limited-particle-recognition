@@ -17,6 +17,7 @@ function flaggedList = flaggingMech(filteredList)
 
     %% Intra-well flagging for ImageMean outliers
     for wellNum = 1:numel(uniqueWell)
+        clear wellPos
 
         wellPos = find(ismember(firstImagePos, find(ismember(Data_wellName, uniqueWell{wellNum})))); % select the well and the specified well name
         
