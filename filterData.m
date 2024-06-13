@@ -8,8 +8,6 @@ function [filteredList, filteredPosList, areaThreshold] = filterData(objectList,
     % Initialize the filtered structure
     filteredList = objectList;
     filteredPosList = posList;
-    % filteredList = struct('objectIndex', {}, 'Intensity', {}, 'AvgPixelIntensity', {}, 'SB_diff', {}, 'NumOfPixels', {}, 'Eccentricity', {}, 'Background', {}, 'ImageMean', {}, 'ImageStd', {}, 'imageNum', {}, 'folderName', {}, 'imageName', {}, 'wellName', {}, 'X', {}, 'Y', {});
-    % filteredPosList = struct('objectIndex', {}, 'CentroidPosX', {}, 'CentroidPosY', {}, 'imageNum', {}, 'imageName', {});
 
     % Iterate through each entry in the original structure
     ind = [];
@@ -28,20 +26,12 @@ function [filteredList, filteredPosList, areaThreshold] = filterData(objectList,
         filteredList(ind) = [];
         filteredPosList(ind) = [];
 
-        % if numOfPixels > areaThreshold(1) && numOfPixels < areaThreshold(2)
-        %     % Add the entry to the filtered structurec
-        %     filteredList(i) = [];
-        %     filteredPosList(i) = [];
-        %     % filteredList(end + 1) = objectList(i);
-        %     % filteredPosList(end + 1) = posList(i);
-        % end
     
+    % Add a new field 'Flags' and flag the filtered elements
     if ~isempty(filteredList) == 1
         temp = flaggingMech(filteredList);
     end
 
-
-    % Add a new field 'Flags' and flag the filtered elements
     parfor rowFilteredList = 1:numel(filteredList)
         filteredList(rowFilteredList).Flags = temp{rowFilteredList};  % Label filtered elements
     end
