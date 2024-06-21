@@ -8,9 +8,9 @@
 
 %% Setting
 
-path = 'G:\Work\Artemisia\20240428_Simpull_Syn_abeta_serum sample storage_2'; % Direct to the main folder to be analysed
+path = 'G:\Work\Artemisia\20240614_Simpull_Syn_Abeta_Tau_serum_plasma_sample storage batch 1'; % Direct to the main folder to be analysed
 
-InstrumentSetting = 2; % Arabidopsis 641nm = 1, Artemisia 641 nm = 2, Arabidopsis 488nm = 3
+InstrumentSetting = 2; % Arabidopsis 638nm = 1, Artemisia 638nm = 2, Arabidopsis 488nm = 3
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
@@ -34,7 +34,7 @@ end
 
 if ~isempty(subfolderNames)
 
-    for i = 2%1:numel(subfolderNames)
+    for i = 1:numel(subfolderNames)
         folderPath = [path '\' subfolderNames{i}];
 
         disp(['Loading images from ' num2str(subfolderNames{i}) '..'])

@@ -8,7 +8,7 @@ function drawFigure(averagedStacksList, filteredPosList, dataPath, imageName)
 
     imageList = [filteredPosList.imageNum];
 
-    lengthList = numel(averagedStacksList);
+    lengthList = numel(uniqueImageNum);
     
     for imageNum = 1:lengthList
         clear currentImage
