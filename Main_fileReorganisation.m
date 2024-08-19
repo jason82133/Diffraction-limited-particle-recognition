@@ -11,11 +11,11 @@ clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
 folder_1 = '';
-folder_2 = 'Analysis 2024-06-04_20-15-15'; % Folder to replace the X-Y coordinates
-savePath = 'G:\Work\Artemisia\20240531_Simpull_Syn_Abeta_Tau_serum_plasma_sample storage batch 1';
+folder_2 = 'Analysis 2024-08-16_22-07-33'; % Folder to replace the X-Y coordinates
+savePath = 'G:\Work\Artemisia\20240815_Simpull_ASC_Abeta_ASC-lecanemab testing';
 
 % Add a column of the slide label
-slide_Name = '20240531_4B12';
+slide_Name = '20240815_ASC-6E10';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.

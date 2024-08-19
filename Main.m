@@ -1,6 +1,6 @@
 
 % Diffraction-limited particle recognition (DLPR)
-% Version 1.14.4
+% Version 1.14.6
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -8,9 +8,11 @@
 
 %% Setting
 
-path = 'G:\Work\Artemisia\20240614_Simpull_Syn_Abeta_Tau_serum_plasma_sample storage batch 1'; % Direct to the main folder to be analysed
+path = 'G:\Work\Artemisia\New folder'; % Direct to the main folder to be analysed
 
 InstrumentSetting = 2; % Arabidopsis 638nm = 1, Artemisia 638nm = 2, Arabidopsis 488nm = 3
+
+NeedResultFigure = 0; % Show result figures = 1, not showing = 0 and accelerate the analysis
 
 truncatedFrame = []; % Remove the frames after the specified frame number in an image. Leave empty if analysing all frames
 
@@ -19,7 +21,7 @@ truncatedFrame = []; % Remove the frames after the specified frame number in an 
 %% Execution
 
 tic
-clearvars -except path InstrumentSetting truncatedFrame
+clearvars -except path InstrumentSetting truncatedFrame NeedResultFigure
 
 Save_path = path;
 
@@ -33,8 +35,9 @@ end
 
 
 if ~isempty(subfolderNames)
-
     for i = 1:numel(subfolderNames)
+        clearvars -except path InstrumentSetting truncatedFrame NeedResultFigure subfolderNames allItems Save_path i
+
         folderPath = [path '\' subfolderNames{i}];
 
         disp(['Loading images from ' num2str(subfolderNames{i}) '..'])
@@ -47,7 +50,9 @@ if ~isempty(subfolderNames)
         [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
 
         dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
-        drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
+        if NeedResultFigure == 1
+            drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
+        end
     end
 else
     folderPath = path;
@@ -62,7 +67,9 @@ else
     [filteredList, filteredPosList, areaThreshold] = filterData(objectList, posList);
     
     dataPath = export(filteredList, Save_path, folderName, areaThreshold, smoothSize);
-    drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
+    if NeedResultFigure == 1
+        drawFigure(averagedStacksList, filteredPosList, dataPath, imageName);
+    end
 end
 
 disp('Completed!')
