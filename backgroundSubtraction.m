@@ -23,8 +23,8 @@ function [outputImageList, mu, sigma, bg, smoothSize] = backgroundSubtraction(av
         % First itinerary of fitting a normal distribution to the pixel intensities in order to remove extreme values
         tempintensities = currentImage(:); % Flatten the image into a column vector
         
-        % median value of the image as background
-        bg(i) = median(tempintensities);
+        % Lower 10% value of the image as background
+        bg(i) = quantile(tempintensities, 0.1);
 
         [temppd, tempMu, tempSigma] = normalDistribution(tempintensities);  
         tempCV = tempSigma/tempMu;
