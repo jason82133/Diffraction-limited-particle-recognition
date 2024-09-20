@@ -1,6 +1,6 @@
 
 % Main_fileReorganisation
-% Version 1.12.5
+% Version 1.12.6
 %
 % Copyright (c) 2023, by Jason C Sang.
 
@@ -11,11 +11,11 @@ clearvars
 
 % Specify the folder path to search for Excel files which belong to one single slide
 folder_1 = '';
-folder_2 = 'Analysis 2024-08-30_14-21-00'; % Folder to replace the X-Y coordinates
-savePath = 'E:\Work\Artemisia\20240827_Simpull_Syn_Abeta_Tau_SpikeNrecovery & LinearityOfDilution';
+folder_2 = 'Analysis 2024-09-20_13-59-06'; % Folder to replace the X-Y coordinates
+savePath = 'D:\Work\Artemisia\20240912_Simpull_Syn_Abeta_Tau_serum_plasma_sample storage batch 1_3 months';
 
 % Add a column of the slide label
-slide_Name = '20240827_HT7-AT8';
+slide_Name = '20240912_6E10';
 
 
 % Define the replacements in the second excel file (to correct the X Y position pabels). Go from large to small numbers.
@@ -151,7 +151,7 @@ else
         table_2 = readtable([allFiles(1).folder, '\', allFiles(1).name], "Delimiter", "comma");
         for j = 2:numberTable
             clear tableTemp
-            tableTemp = readtable([allFiles(j).folder, '\', allFiles(j).name]);
+            tableTemp = readtable([allFiles(j).folder, '\', allFiles(j).name], "Delimiter", "comma");
             table_2 = [table_2; tableTemp];
         end
     end
